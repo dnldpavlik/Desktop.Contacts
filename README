@@ -1,0 +1,7 @@
+= Desktop Contacts Module =
+
+A Module that uses both Caliburn.Micro and ReactiveUX for building a conventions based and reactive/responsive client module.  
+
+
+
+This is just the module and does not contain the desktop shell that runs this module.  
