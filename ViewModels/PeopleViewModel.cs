@@ -11,6 +11,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	using DonPavlik.WikiRepository.Interfaces;
 	using ReactiveUI;
 
+	/// <summary>
+	/// 
+	/// </summary>
 	[Export(typeof(IPeopleViewModel)), PartCreationPolicy(CreationPolicy.NonShared)]
 	public class PeopleViewModel : 
 		ReactiveObject, 
@@ -21,15 +24,26 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 		private IEventAggregator _eventAggregator;
 
+		/// <summary>
+		/// Creates an instance of the <see cref="PeopleViewModel"/> class.
+		/// </summary>
+		/// <param name="eventAggregator">Event Aggregator for dealing with 
+		/// events.</param>
 		[ImportingConstructor]
 		public PeopleViewModel(IEventAggregator eventAggregator)
 		{
 			this._eventAggregator = eventAggregator;
 		}
 
+		/// <summary>
+		/// Gets the Contact Repository
+		/// </summary>
 		[Import]
 		public IRepository<IContact> ContactRepository { get; private set; }
 
+		/// <summary>
+		/// Gets or sets teh Selected Person
+		/// </summary>
 		public ContactViewModel SelectedPerson
 		{
 			get
@@ -48,6 +62,16 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets the collection of People
+		/// </summary>
+		public ReactiveCollection<ContactViewModel> People { get; private set; }
+
+		/// <summary>
+		/// Executed when the all imports have been satisfied by MEF.  
+		/// 
+		/// Gets the collection of contacts from the contact repository.
+		/// </summary>
 		public async void OnImportsSatisfied()
 		{
 			ICollection<IContact> contacts = await this.GetPeople();
@@ -61,9 +85,5 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		{
 			return await this.ContactRepository.GetAll();
 		}
-
-		public ReactiveCollection<ContactViewModel> People { get; private set; }
-
-		public object ActionsRegion { get; set; }
 	}
 }

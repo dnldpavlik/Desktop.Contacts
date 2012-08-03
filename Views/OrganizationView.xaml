@@ -49,7 +49,6 @@
 			FontSize="11"
 			Foreground="#666666"
 			FontFamily="Segoe UI"
-			x:Name="Name" />
-		<!-- 999999 -->
+			x:Name="OrgName" />
 	</Grid>
 </UserControl>

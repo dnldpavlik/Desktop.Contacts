@@ -4,20 +4,20 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel.Composition;
-	using System.Configuration;
 	using System.Diagnostics.Contracts;
 	using System.Linq;
-	using System.Reactive;
-	using System.Reactive.Linq;
 	using Caliburn.Micro;
 	using DonPavlik.Desktop.Contacts.Events;
 	using DonPavlik.Desktop.Contacts.Interfaces;
 	using DonPavlik.Desktop.Infrastructure.Interfaces;
 	using DonPavlik.Domain.Interfaces.Roles;
-	using DonPavlik.WikiRepository.Repositories;
 	using ReactiveUI;
 	using ReactiveUI.Xaml;
 
+	/// <summary>
+	/// Contacts Module View Model definition.  This Model class is the root of the 
+	/// contacts module.
+	/// </summary>
 	[Export(typeof(IModule))]
 	public class ContactsModuleViewModel : 
 		ReactiveObject, 
@@ -25,6 +25,8 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		IHandle<SaveEvent>,
 		IHandle<SelectedPersonEvent>
 	{
+		#region Private Constants and Fields
+
 		private const string ADD_PERSON = "AddPerson";
 
 		private const string EDIT_PERSON = "EditPerson";
@@ -40,8 +42,16 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 		private IContact _SelectedPerson;
 
-		private List<string> _Navigation = new List<string>();
+		private List<string> _Navigation = new List<string>(); 
 
+		#endregion
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="ContactsModuleViewModel"/> class.
+		/// </summary>
+		/// <param name="events">
+		/// Event aggregator for dealing with external events.
+		/// </param>
 		[ImportingConstructor]
 		public ContactsModuleViewModel(IEventAggregator events)
 		{
@@ -53,7 +63,12 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			this.SetupNavigationCommand();
 			this.InitializeDefaults();
 		}
+		
+		#region Public Properties
 
+		/// <summary>
+		/// Gets the active module name (Should be view name)
+		/// </summary>
 		public string ActiveModuleName
 		{
 			get
@@ -62,6 +77,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets the Navigation for this module. 
+		/// </summary>
 		public List<string> Navigation
 		{
 			get
@@ -70,24 +88,38 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
-		public ReactiveAsyncCommand NavigateBack 
-		{ 
-			get; 
-			protected set; 
+		/// <summary>
+		/// Gets the Navigation back command that controls moving backwards.
+		/// </summary>
+		public ReactiveAsyncCommand NavigateBack
+		{
+			get;
+			protected set;
 		}
 
+		/// <summary>
+		/// Gets the add command that shows the add view for the active
+		/// subject matter.
+		/// </summary>
 		public ReactiveAsyncCommand Add
 		{
 			get;
 			protected set;
 		}
 
+		/// <summary>
+		/// Gets the edit command that shows the edit view for the active
+		/// subject matter.
+		/// </summary>
 		public ReactiveAsyncCommand Edit
 		{
 			get;
 			protected set;
 		}
 
+		/// <summary>
+		/// Gets the active item, which is the active view
+		/// </summary>
 		public object ActiveItem
 		{
 			get
@@ -102,6 +134,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets the Selected person.
+		/// </summary>
 		public IContact SelectedPerson
 		{
 			get
@@ -109,17 +144,22 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 				return this._SelectedPerson;
 			}
 
-			set
+			protected set
 			{
 				this._SelectedPerson = value;
 				this.RaisePropertyChanged(x => x.SelectedPerson);
 			}
 		}
+		
+		#endregion
 
+		/// <summary>
+		/// Handles the selected person event, used enable edit functionality
+		/// of contacts.
+		/// </summary>
+		/// <param name="selectedPersonEvent">Selected person event</param>
 		public void Handle(SelectedPersonEvent selectedPersonEvent)
 		{
-			Contract.Requires(selectedPersonEvent != null, "Selected person event can not be null.");
-
 			if (this.SelectedPerson != selectedPersonEvent.SelectedContacts)
 			{
 				this._cachedViews.Remove(EDIT_PERSON);
@@ -127,11 +167,18 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Handles the save event, used to force updates for the subject 
+		/// list view.
+		/// </summary>
+		/// <param name="saveEvent">Save event</param>
 		public void Handle(SaveEvent saveEvent)
 		{
 			this._cachedViews.Remove(ADD_PERSON);
 			this.NavigateBack.Execute(null);
 		}
+		
+		#region Private Methods
 
 		private void LoadViewModelFromActiveModuleName()
 		{
@@ -141,7 +188,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 					if (!this._cachedViews.ContainsKey(ADD_PERSON))
 					{
 						this._cachedViews.Add(
-							ADD_PERSON, 
+							ADD_PERSON,
 							IoC.Get<IAddUserViewModel>());
 					}
 					break;
@@ -222,6 +269,8 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		{
 			this._activeModuleName = GROUPS;
 			this.LoadViewModelFromActiveModuleName();
-		}
+		} 
+
+		#endregion
 	}
 }

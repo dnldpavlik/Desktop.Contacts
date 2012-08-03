@@ -13,6 +13,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	using Microsoft.Win32;
 	using ReactiveUI;
 
+	/// <summary>
+	/// Add user view model defintion that describes the input needed to create a user.
+	/// </summary>
 	[Export(typeof(IAddUserViewModel)), PartCreationPolicy(CreationPolicy.NonShared)]
 	public class AddUserViewModel : ReactiveObject, IAddUserViewModel
 	{
@@ -30,6 +33,15 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 		private string _FullName;
 
+		/// <summary>
+		/// Initializes a new instance of <see cref="AddUserViewModel"/> class.
+		/// </summary>
+		/// <param name="contactRepo">
+		/// The contact repository
+		/// </param>
+		/// <param name="events">
+		/// Event aggregator used for sending of events.
+		/// </param>
 		[ImportingConstructor]
 		public AddUserViewModel(
 			IRepository<IContact> contactRepo,
@@ -43,12 +55,19 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			this.Caption = ADD_CONTACT;
 		}
 
+		/// <summary>
+		/// Gets or sets the caption to let the user know if they are
+		/// adding or editing a user.
+		/// </summary>
 		public string Caption
 		{
 			get;
 			set;
 		}
 
+		/// <summary>
+		/// Gets or sets the date of death for this Contact
+		/// </summary>
 		public DateTime? DateOfDeath 
 		{
 			get
@@ -62,6 +81,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the date of birth for this Contact
+		/// </summary>
 		public DateTime? DateOfBirth 
 		{
 			get
@@ -75,6 +97,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets boolean value if this Contact is a Male
+		/// </summary>
 		public bool IsMale
 		{
 			get
@@ -88,6 +113,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets boolean value if this Contact is a Female
+		/// </summary>
 		public bool IsFemale
 		{
 			get
@@ -101,6 +129,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the full name of the Contact
+		/// </summary>
 		public string FullName 
 		{
 			get
@@ -115,6 +146,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the selected picture for the Contact
+		/// </summary>
 		public string SelectedPicture
 		{
 			get
@@ -129,6 +163,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the Email Address for the Contact
+		/// </summary>
 		public string EMailAddress
 		{
 			get
@@ -142,6 +179,15 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the contact view model that is being edited
+		/// </summary>
+		public ContactViewModel PersonPreview { get; set; }
+
+		/// <summary>
+		/// Saves the changes to the contact repository. Sends the save event 
+		/// that save was successful.
+		/// </summary>
 		public void Save()
 		{
 			if (string.Equals(EDIT_CONTACT, this.Caption))
@@ -160,6 +206,10 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 				});
 		}
 
+		/// <summary>
+		/// Opens the file open dialog so that the user can select the picture they want for 
+		/// the user, and assigns that value to the Contact.
+		/// </summary>
 		public void SelectPictureAction()
 		{
 			OpenFileDialog selectPictureDialog = new OpenFileDialog();
@@ -172,8 +222,12 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
-		public ContactViewModel PersonPreview { get; set; }
-
+		/// <summary>
+		/// Hydrates the add user view model with the contact that is 
+		/// to be edited and sets its mode to edit mode from save.
+		/// </summary>
+		/// <param name="selectedContact">The selected contact to 
+		/// be edited</param>
 		public void EditExistingContact(IContact selectedContact)
 		{
 			this.PersonPreview = new ContactViewModel(selectedContact);

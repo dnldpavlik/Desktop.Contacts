@@ -1,24 +1,30 @@
 ﻿
 namespace DonPavlik.Desktop.Contacts.ViewModels
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel.Composition;
-	using System.Linq;
-	using System.Text;
-	using DonPavlik.Desktop.Contacts.Interfaces;
 	using DonPavlik.Domain.Interfaces;
 
+	/// <summary>
+	/// Organization view model class definiton
+	/// </summary>
 	public class OrganizationViewModel
 	{
 		private IOrganization _organization;
 
+		/// <summary>
+		/// Creasts an instance of the <see cref="OrganizationViewModel"/> class.
+		/// </summary>
+		/// <param name="organization">
+		/// Organization being wrapped
+		/// </param>
 		public OrganizationViewModel(IOrganization organization)
 		{
 			this._organization = organization;
 		}
 
-		public string Name
+		/// <summary>
+		/// Gets the organization name
+		/// </summary>
+		public string OrgName
 		{
 			get
 			{

@@ -1,28 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-using Caliburn.Micro;
-using DonPavlik.Domain.Interfaces;
-using DonPavlik.Domain.Interfaces.Roles;
-using ReactiveUI;
-
+﻿
 namespace DonPavlik.Desktop.Contacts.ViewModels
 {
+	using System;
+	using System.Threading.Tasks;
+	using System.Windows.Media.Imaging;
+	using DonPavlik.Domain.Interfaces.Roles;
+	using ReactiveUI;
+
+	/// <summary>
+	/// Contact view model class definition
+	/// </summary>
 	public class ContactViewModel : ReactiveObject
 	{
 		private IContact _contact;
 
 		private BitmapImage _image = null;
 
+		/// <summary>
+		/// Initializes a new instance of <see cref="ContactViewModel"/> class
+		/// </summary>
+		/// <param name="contact">Contact to be modeled</param>
 		public ContactViewModel(IContact contact)
 		{
 			this._contact = contact;
 		}
 
+		/// <summary>
+		/// Gets or sets the full name of the contact
+		/// </summary>
 		public string FullName
 		{
 			get
@@ -37,6 +42,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the image url for the contact
+		/// </summary>
 		public BitmapImage ImageUrl
 		{
 			get
@@ -67,6 +75,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets the contact
+		/// </summary>
 		public IContact Contact
 		{
 			get
@@ -75,16 +86,32 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Refreshes the image binding
+		/// </summary>
 		public void RefreshImageBinding()
 		{
 			this.RaisePropertyChanged(x => x.ImageUrl);
 		}
 
+		/// <summary>
+		/// Gets image as bitmap in an async way.
+		/// 
+		/// Disabled warning 1998, because you can not await new BitmapImage
+		/// </summary>
+		/// <param name="Uri">
+		/// The location where the image.
+		/// </param>
+		/// <returns>
+		/// Bitmap image populated with the bytes from the uri
+		/// </returns>
+#pragma warning disable 1998
 		private async Task<BitmapImage> GetImageAsBitmap(string Uri)
 		{
 			BitmapImage image = new BitmapImage(new Uri(Uri, UriKind.Absolute));
 
 			return image;
 		}
+#pragma warning restore 1998
 	}
 }

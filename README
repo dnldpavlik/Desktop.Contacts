@@ -2,6 +2,17 @@
 
 A Module that uses both Caliburn.Micro and ReactiveUX for building a conventions based and reactive/responsive client module.  
 
+== Technologies used ==
+ * Caliburn.Micro
+   - IoC with MEF
+   - Convention of loading of Views for defined View Models
+   - Concention of x:Name for auto binding properties and Actions
+   - Event Aggregator for message communication between views
+ * ReactiveUX
+   - Reactive Object 
+   - Reactive Collections
+   - Reactive Async Commands
+ * MEF
+ * Code contracts
 
-
-This is just the module and does not contain the desktop shell that runs this module.  
+Note:: This is just the module and does not contain the desktop shell that runs this module.  
