@@ -114,7 +114,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 				default:
 					if (!this._cachedViews.ContainsKey(ORGANIZATION))
 					{
-						this._cachedViews.Add(ORGANIZATION, new OrganizationsViewModel());
+						this._cachedViews.Add(
+							ORGANIZATION, 
+							IoC.Get<IOrganizationsViewModel>());
 					}
 					break;
 			}
