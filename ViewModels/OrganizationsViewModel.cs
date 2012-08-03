@@ -1,17 +1,12 @@
 ﻿
 namespace DonPavlik.Desktop.Contacts.ViewModels
 {
-	using System;
 	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
 	using System.ComponentModel.Composition;
-	using System.Linq;
-	using System.Text;
 	using System.Threading.Tasks;
 	using DonPavlik.Desktop.Contacts.Interfaces;
 	using DonPavlik.Domain.Interfaces;
 	using DonPavlik.WikiRepository.Interfaces;
-	using DonPavlik.WikiRepository.Repositories;
 	using ReactiveUI;
 
 	[Export(typeof(IOrganizationsViewModel)), PartCreationPolicy(CreationPolicy.NonShared)]
@@ -20,11 +15,6 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		IPartImportsSatisfiedNotification, 
 		IOrganizationsViewModel
 	{
-		[ImportingConstructor]
-		public OrganizationsViewModel()
-		{
-		}
-
 		[Import]
 		public IRepository<IOrganization> OrganizationRepository { get; private set; }
 

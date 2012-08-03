@@ -1,16 +1,15 @@
 ﻿
 namespace DonPavlik.Desktop.Contacts.ViewModels
 {
-	using System.Linq;
 	using System.Collections.Generic;
 	using System.ComponentModel.Composition;
 	using System.Threading.Tasks;
+	using Caliburn.Micro;
+	using DonPavlik.Desktop.Contacts.Events;
 	using DonPavlik.Desktop.Contacts.Interfaces;
 	using DonPavlik.Domain.Interfaces.Roles;
 	using DonPavlik.WikiRepository.Interfaces;
 	using ReactiveUI;
-	using Caliburn.Micro;
-	using DonPavlik.Desktop.Contacts.Events;
 
 	[Export(typeof(IPeopleViewModel)), PartCreationPolicy(CreationPolicy.NonShared)]
 	public class PeopleViewModel : 
