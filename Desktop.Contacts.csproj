@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2A06DA6D-785E-46A1-A7A7-77088C641F2A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DonPavlik.Desktop.Contacts</RootNamespace>
+    <AssemblyName>DonPavlik.Desktop.Contacts</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Caliburn.Micro">
+      <HintPath>..\..\..\Resources\Development\Frameworks\Caliburn.Micro\Debug\Caliburn.Micro.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="ReactiveUI">
+      <HintPath>..\..\..\Resources\Development\Frameworks\ReactiveUI\ReactiveUI.dll</HintPath>
+    </Reference>
+    <Reference Include="ReactiveUI.Xaml">
+      <HintPath>..\..\..\Resources\Development\Frameworks\ReactiveUI\ReactiveUI.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.Composition.Registration" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Reactive, Version=1.1.11111.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Resources\Development\Frameworks\ReactiveUI\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Events\SelectedPersonEvent.cs" />
+    <Compile Include="Interfaces\IAddUserViewModel.cs" />
+    <Compile Include="Interfaces\IGroupViewModel.cs" />
+    <Compile Include="Interfaces\IPeopleViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Events\SaveEvent.cs" />
+    <Compile Include="ViewModels\AddUserViewModel.cs" />
+    <Compile Include="ViewModels\ContactViewModel.cs" />
+    <Compile Include="ViewModels\ContactsModuleViewModel.cs" />
+    <Compile Include="ViewModels\GroupViewModel.cs" />
+    <Compile Include="ViewModels\OrganizationsViewModel.cs" />
+    <Compile Include="ViewModels\OrganizationViewModel.cs" />
+    <Compile Include="ViewModels\PeopleViewModel.cs" />
+    <Compile Include="Views\AddUserView.xaml.cs">
+      <DependentUpon>AddUserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ContactsModuleView.xaml.cs">
+      <DependentUpon>ContactsModuleView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ContactView.xaml.cs">
+      <DependentUpon>ContactView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GroupView.xaml.cs">
+      <DependentUpon>GroupView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrganizationsView.xaml.cs">
+      <DependentUpon>OrganizationsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrganizationView.xaml.cs">
+      <DependentUpon>OrganizationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PeopleView.xaml.cs">
+      <DependentUpon>PeopleView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Desktop.Infrastructure\Desktop.Infrastructure.csproj">
+      <Project>{f2ccb7df-e34a-4e93-ac49-678f191364cd}</Project>
+      <Name>Desktop.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Domain\Domain.csproj">
+      <Project>{37d48c2c-026f-4253-b499-8b5a8925c7a7}</Project>
+      <Name>Domain %28Domain\Domain%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WikiRepository\WikiRepository.csproj">
+      <Project>{988101b2-4b53-4d8b-8d60-603d171a1312}</Project>
+      <Name>WikiRepository</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\AddUserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ContactsModuleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ContactView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GroupView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OrganizationsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OrganizationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PeopleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,38 @@
+<UserControl
+	x:Class="DonPavlik.Desktop.Contacts.Views.PeopleView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	mc:Ignorable="d"
+	d:DesignHeight="300"
+	d:DesignWidth="300">
+	
+	<Grid>
+		<!--Region Grid Column and Row Definitions-->
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition 
+				Width="*" />
+		</Grid.ColumnDefinitions>
+		<!--EndRegion-->
+		
+		<!--Region List of People-->
+		<ListBox
+			BorderThickness="0"
+			Background="Transparent"
+			x:Name="People"
+			SelectedItem="{Binding SelectedPerson}">
+			<ListBox.ItemsPanel>
+				<ItemsPanelTemplate>
+					<WrapPanel
+						Orientation="Horizontal"
+						Width="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"
+						ItemWidth="{Binding (ListView.View).ItemWidth, RelativeSource={RelativeSource AncestorType=ListView}}"
+						MinWidth="{Binding ItemWidth, RelativeSource={RelativeSource Self}}"
+						ItemHeight="{Binding (ListView.View).ItemHeight, RelativeSource={RelativeSource AncestorType=ListView}}" />
+				</ItemsPanelTemplate>
+			</ListBox.ItemsPanel>
+		</ListBox>
+		<!--EndRegion-->
+	</Grid>
+</UserControl>

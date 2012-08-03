@@ -1,0 +1,62 @@
+﻿<UserControl
+	x:Class="DonPavlik.Desktop.Contacts.Views.ContactView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	mc:Ignorable="d"
+	d:DesignHeight="300"
+	d:DesignWidth="300">
+	<Grid
+		Width="246"
+		Height="80"
+		Margin="2">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="75" />
+			<ColumnDefinition
+				Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="75" />
+		</Grid.RowDefinitions>
+		
+		<Rectangle
+			Width="75"
+			Height="75">
+			<Rectangle.Fill>
+				<DrawingBrush
+					Stretch="Uniform">
+					<DrawingBrush.Drawing>
+						<DrawingGroup>
+							<DrawingGroup.Children>
+								<GeometryDrawing
+									Brush="#CACACA"
+									Geometry="F1 M 322.75,210.25L 462,210.25L 462,350.25L 461.5,350.25L 455.5,326L 422.75,307.5L 422.25,301.25L 414,297.75L 416,296L 417.75,291L 425.5,284.25L 425.5,277.75L 427.5,274.75L 427.5,267.25L 429.25,265.25L 429.25,261L 428,258L 426.75,251.75L 422.75,244.5L 417.75,237.5L 411.75,230.25L 404.5,226.25L 399.25,226.5L 396.75,228.5L 392.25,228.5L 388.75,226.25L 384,226.75L 381.75,229L 378.75,229.25L 376,231.75L 372.25,235.25L 367.75,241.25L 364.5,246L 361.75,252L 361,261.75L 358.5,264.5L 358,267.25L 361.5,270.75L 362,280.25L 368.5,286.75L 369,289.75L 373.75,298L 368.25,300.5L 366,307.75L 332,324.5L 325.75,350.25L 322.75,350.25L 322.75,210.25 Z " />
+							</DrawingGroup.Children>
+						</DrawingGroup>
+					</DrawingBrush.Drawing>
+				</DrawingBrush>
+			</Rectangle.Fill>
+		</Rectangle>
+
+		<Image
+			Width="75"
+			Height="75"
+			x:Name="ImageUrl"
+			Source="{Binding ImageUrl, IsAsync=True}"
+			Stretch="Fill" />
+
+		<TextBlock
+			Margin="4,0,0,0"
+			Grid.Column="1"
+			VerticalAlignment="Top"
+			FontWeight="SemiBold"
+			FontSize="11pt"
+			Foreground="#666666"
+			FontFamily="Segoe UI"
+			x:Name="FullName" />
+		<!-- 999999 -->
+	</Grid>
+</UserControl>

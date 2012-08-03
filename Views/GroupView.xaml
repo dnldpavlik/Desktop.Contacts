@@ -1,0 +1,326 @@
+<UserControl
+	x:Class="DonPavlik.Desktop.Contacts.Views.GroupView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	mc:Ignorable="d"
+	d:DesignHeight="300"
+	d:DesignWidth="300">
+	
+	<UserControl.Resources>
+		<BooleanToVisibilityConverter
+			x:Key="BoolToVisConverter" />
+		<Storyboard
+			x:Key="FlatAnimation"
+			RepeatBehavior="Forever">
+			<ObjectAnimationUsingKeyFrames
+				Storyboard.TargetProperty="(UIElement.Visibility)"
+				Storyboard.TargetName="ellipse">
+				<DiscreteObjectKeyFrame
+					KeyTime="0"
+					Value="{x:Static Visibility.Hidden}" />
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:0.5"
+					Value="{x:Static Visibility.Visible}" />
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames
+				Storyboard.TargetProperty="(UIElement.Visibility)"
+				Storyboard.TargetName="ellipse1">
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:0.5"
+					Value="{x:Static Visibility.Hidden}" />
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:1"
+					Value="{x:Static Visibility.Visible}" />
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames
+				Storyboard.TargetProperty="(UIElement.Visibility)"
+				Storyboard.TargetName="ellipse2">
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:1"
+					Value="{x:Static Visibility.Hidden}" />
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:1.5"
+					Value="{x:Static Visibility.Visible}" />
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames
+				Storyboard.TargetProperty="(UIElement.Visibility)"
+				Storyboard.TargetName="ellipse3">
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:1.5"
+					Value="{x:Static Visibility.Hidden}" />
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:2"
+					Value="{x:Static Visibility.Visible}" />
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames
+				Storyboard.TargetProperty="(UIElement.Visibility)"
+				Storyboard.TargetName="ellipse4">
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:2"
+					Value="{x:Static Visibility.Hidden}" />
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:2.5"
+					Value="{x:Static Visibility.Visible}" />
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames
+				Storyboard.TargetProperty="(UIElement.Visibility)"
+				Storyboard.TargetName="ellipse5">
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:2.5"
+					Value="{x:Static Visibility.Hidden}" />
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:3"
+					Value="{x:Static Visibility.Visible}" />
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames
+				Storyboard.TargetProperty="(UIElement.Visibility)"
+				Storyboard.TargetName="ellipse6">
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:3"
+					Value="{x:Static Visibility.Hidden}" />
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:3.5"
+					Value="{x:Static Visibility.Visible}" />
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames
+				Storyboard.TargetProperty="(UIElement.Visibility)"
+				Storyboard.TargetName="ellipse7">
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:3.5"
+					Value="{x:Static Visibility.Hidden}" />
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:4"
+					Value="{x:Static Visibility.Visible}" />
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames
+				Storyboard.TargetProperty="(UIElement.Visibility)"
+				Storyboard.TargetName="ellipse8">
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:4"
+					Value="{x:Static Visibility.Hidden}" />
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:4.5"
+					Value="{x:Static Visibility.Visible}" />
+			</ObjectAnimationUsingKeyFrames>
+			<ObjectAnimationUsingKeyFrames
+				Storyboard.TargetProperty="(UIElement.Visibility)"
+				Storyboard.TargetName="ellipse9">
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:4.5"
+					Value="{x:Static Visibility.Hidden}" />
+				<DiscreteObjectKeyFrame
+					KeyTime="0:0:5"
+					Value="{x:Static Visibility.Visible}" />
+			</ObjectAnimationUsingKeyFrames>
+		</Storyboard>
+	</UserControl.Resources>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="Auto" />
+			<RowDefinition
+				Height="*" />
+		</Grid.RowDefinitions>
+		
+		<StackPanel
+			Orientation="Horizontal"
+			TextBlock.FontSize="18"
+			TextBlock.FontFamily="Sogoe UI">
+			<Button
+				Height="32"
+				FontSize="20pt"
+				FontWeight="Light"
+				x:Name="ShowPeople"
+				Content="People"
+				Style="{DynamicResource ClearButtonOnWhite}" />
+			<Button
+				Margin="12,0,0,0"
+				Height="32"
+				FontSize="20pt"
+				FontWeight="Light"
+				x:Name="ShowOrganizations"
+				Content="Organizations"
+				Style="{DynamicResource ClearButtonOnWhite}" />
+		</StackPanel>
+
+		<ContentControl
+			Grid.Row="1"
+			x:Name="ActiveItem" />
+		
+		<Grid
+			Grid.Row="1"
+			Height="65"
+			Width="105.5"
+			Visibility="{Binding Processing, Converter={StaticResource BoolToVisConverter}}">
+			<Rectangle
+				Height="65"
+				Width="105.5">
+				<Rectangle.Fill>
+					<DrawingBrush
+						Stretch="Uniform">
+						<DrawingBrush.Drawing>
+							<DrawingGroup>
+								<DrawingGroup.Children>
+									<GeometryDrawing
+										Brush="#FFFBFBFB"
+										Geometry="F1 M 2.5,0.500008L 103.992,0.500008C 105.096,0.500008 105.992,1.39548 105.992,2.50001L 105.992,63.5C 105.992,64.6045 105.096,65.5 103.992,65.5L 2.5,65.5C 1.3954,65.5 0.5,64.6045 0.5,63.5L 0.5,2.50001C 0.5,1.39548 1.3954,0.500008 2.5,0.500008 Z ">
+										<GeometryDrawing.Pen>
+											<Pen
+												LineJoin="Round"
+												Brush="#FF45789D" />
+										</GeometryDrawing.Pen>
+									</GeometryDrawing>
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 27.4859,37.4L 19.0059,37.4L 19.0059,25.72L 22.0459,25.72L 22.0459,35.16L 27.4859,35.16L 27.4859,37.4 Z " />
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 38.2059,33.005C 38.2059,34.465 37.7788,35.6158 36.9246,36.4575C 36.0705,37.2991 34.8709,37.72 33.3259,37.72C 31.7809,37.72 30.5813,37.2991 29.7271,36.4575C 28.873,35.6158 28.4459,34.465 28.4459,33.005C 28.4459,31.5333 28.8759,30.3779 29.7359,29.5387C 30.5959,28.6996 31.7926,28.28 33.3259,28.28C 34.8809,28.28 36.083,28.7021 36.9321,29.5462C 37.7813,30.3904 38.2059,31.5433 38.2059,33.005 Z M 34.7484,35.2175C 34.9401,34.9841 35.0842,34.7041 35.1809,34.3775C 35.2775,34.0508 35.3259,33.5983 35.3259,33.02C 35.3259,32.485 35.2763,32.0366 35.1771,31.675C 35.078,31.3133 34.9401,31.0241 34.7634,30.8075C 34.5867,30.5858 34.3746,30.4291 34.1271,30.3375C 33.8796,30.2458 33.6125,30.2 33.3259,30.2C 33.0392,30.2 32.7842,30.2379 32.5609,30.3137C 32.3375,30.3896 32.1242,30.5408 31.9209,30.7675C 31.7392,30.9775 31.5946,31.2662 31.4871,31.6337C 31.3796,32.0012 31.3259,32.4633 31.3259,33.02C 31.3259,33.5166 31.3726,33.9475 31.4659,34.3125C 31.5592,34.6775 31.6967,34.9708 31.8784,35.1925C 32.0551,35.4025 32.2659,35.5562 32.5109,35.6537C 32.7559,35.7512 33.0359,35.8 33.3509,35.8C 33.6209,35.8 33.8784,35.7554 34.1234,35.6662C 34.3684,35.5771 34.5767,35.4275 34.7484,35.2175 Z " />
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 45.4059,35.1475L 45.4059,33.24C 45.0342,33.2733 44.6322,33.3183 44.1996,33.375C 43.7672,33.4316 43.4384,33.4983 43.2134,33.575C 42.9384,33.6666 42.7284,33.8008 42.5834,33.9775C 42.4384,34.1542 42.3659,34.3866 42.3659,34.675C 42.3659,34.865 42.3813,35.02 42.4121,35.14C 42.443,35.26 42.5192,35.3741 42.6409,35.4825C 42.7576,35.5908 42.8976,35.6708 43.0609,35.7225C 43.2242,35.7741 43.4792,35.8 43.8259,35.8C 44.1009,35.8 44.3797,35.7404 44.6621,35.6212C 44.9447,35.5021 45.1926,35.3442 45.4059,35.1475 Z M 45.4059,36.47C 45.2559,36.585 45.0701,36.7233 44.8484,36.885C 44.6267,37.0466 44.4176,37.1741 44.2209,37.2675C 43.9476,37.4058 43.6634,37.5158 43.3684,37.5975C 43.0734,37.6791 42.7501,37.72 42.3984,37.72C 41.5717,37.72 40.8797,37.4587 40.3222,36.9362C 39.7646,36.4137 39.4859,35.7458 39.4859,34.9325C 39.4859,34.2842 39.628,33.7541 39.9121,33.3425C 40.1963,32.9308 40.5992,32.6058 41.1209,32.3675C 41.6376,32.1308 42.2784,31.9621 43.0434,31.8612C 43.8084,31.7604 44.6017,31.6866 45.4234,31.64L 45.4234,31.59C 45.4234,31.065 45.2284,30.7021 44.8384,30.5012C 44.4484,30.3004 43.8742,30.2 43.1159,30.2C 42.6592,30.2 42.1721,30.2842 41.6547,30.4525C 41.1371,30.6208 40.7659,30.75 40.5409,30.84L 40.2859,30.84L 40.2859,28.7175C 40.5826,28.6391 41.0659,28.5466 41.7359,28.44C 42.4059,28.3333 43.0776,28.28 43.7509,28.28C 45.3509,28.28 46.5067,28.5287 47.2184,29.0262C 47.9301,29.5237 48.2859,30.3041 48.2859,31.3675L 48.2859,37.4L 45.4059,37.4L 45.4059,36.47 Z " />
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 59.4859,37.4L 56.6059,37.4L 56.6059,36.485C 56.1176,36.8816 55.6605,37.1866 55.2346,37.4C 54.8088,37.6133 54.3176,37.72 53.7609,37.72C 52.6842,37.72 51.8226,37.3004 51.1759,36.4612C 50.5292,35.622 50.2059,34.4908 50.2059,33.0675C 50.2059,32.3075 50.3151,31.6341 50.5334,31.0475C 50.7517,30.4608 51.0501,29.9575 51.4284,29.5375C 51.7851,29.1391 52.2184,28.83 52.7284,28.61C 53.2384,28.39 53.7476,28.28 54.2559,28.28C 54.7876,28.28 55.223,28.3358 55.5621,28.4475C 55.9013,28.5591 56.2492,28.7008 56.6059,28.8725L 56.6059,25.24L 59.4859,25.24L 59.4859,37.4 Z M 56.6059,35.095L 56.6059,30.605C 56.4042,30.5183 56.1913,30.4558 55.9672,30.4175C 55.743,30.3791 55.5384,30.36 55.3534,30.36C 54.5967,30.36 54.0297,30.6004 53.6522,31.0812C 53.2747,31.562 53.0859,32.2291 53.0859,33.0825C 53.0859,33.9775 53.2376,34.6275 53.5409,35.0325C 53.8442,35.4375 54.3309,35.64 55.0009,35.64C 55.2626,35.64 55.5396,35.5895 55.8322,35.4887C 56.1246,35.3879 56.3826,35.2566 56.6059,35.095 Z " />
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 64.9259,37.4L 62.0459,37.4L 62.0459,28.6L 64.9259,28.6L 64.9259,37.4 Z M 64.9259,27.32L 62.0459,27.32L 62.0459,25.24L 64.9259,25.24L 64.9259,27.32 Z " />
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 76.2859,37.4L 73.4059,37.4L 73.4059,32.96C 73.4059,32.5983 73.3884,32.2379 73.3534,31.8787C 73.3184,31.5196 73.2584,31.255 73.1734,31.085C 73.0734,30.8883 72.9276,30.745 72.7359,30.655C 72.5442,30.565 72.2759,30.52 71.9309,30.52C 71.6859,30.52 71.4376,30.5625 71.1859,30.6475C 70.9342,30.7325 70.6609,30.8683 70.3659,31.055L 70.3659,37.4L 67.4859,37.4L 67.4859,28.6L 70.3659,28.6L 70.3659,29.505C 70.8592,29.11 71.3334,28.807 71.7884,28.5962C 72.2434,28.3854 72.7484,28.28 73.3034,28.28C 74.2384,28.28 74.9692,28.5591 75.4959,29.1175C 76.0226,29.6758 76.2859,30.5108 76.2859,31.6225L 76.2859,37.4 Z " />
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 87.4859,36.4175C 87.4859,37.2458 87.3671,37.9433 87.1297,38.51C 86.8921,39.0766 86.5601,39.52 86.1334,39.84C 85.7067,40.165 85.1913,40.3996 84.5871,40.5437C 83.983,40.6879 83.3017,40.76 82.5434,40.76C 81.9267,40.76 81.3192,40.7237 80.7209,40.6512C 80.1226,40.5787 79.6042,40.4908 79.1659,40.3875L 79.1659,38.2L 79.5109,38.2C 79.8576,38.32 80.2796,38.43 80.7771,38.53C 81.2746,38.63 81.7201,38.68 82.1134,38.68C 82.6384,38.68 83.0647,38.6308 83.3921,38.5325C 83.7197,38.4341 83.9692,38.2941 84.1409,38.1125C 84.3042,37.9425 84.4226,37.7246 84.4959,37.4587C 84.5692,37.1929 84.6059,36.8741 84.6059,36.5025L 84.6059,36.335C 84.2642,36.6133 83.8859,36.8337 83.4709,36.9962C 83.0559,37.1587 82.5934,37.24 82.0834,37.24C 80.8434,37.24 79.8872,36.8675 79.2146,36.1225C 78.5422,35.3775 78.2059,34.2433 78.2059,32.72C 78.2059,31.99 78.3084,31.36 78.5134,30.83C 78.7184,30.3 79.0076,29.8383 79.3809,29.445C 79.7276,29.0783 80.1542,28.7925 80.6609,28.5875C 81.1676,28.3825 81.6868,28.28 82.2184,28.28C 82.6967,28.28 83.1317,28.3362 83.5234,28.4487C 83.9151,28.5612 84.2709,28.7175 84.5909,28.9175L 84.6959,28.6L 87.4859,28.6L 87.4859,36.4175 Z M 84.6059,34.6625L 84.6059,30.585C 84.4409,30.515 84.2388,30.46 83.9996,30.42C 83.7605,30.38 83.5451,30.36 83.3534,30.36C 82.5967,30.36 82.0296,30.5775 81.6521,31.0125C 81.2746,31.4475 81.0859,32.055 81.0859,32.835C 81.0859,33.7016 81.2467,34.3058 81.5684,34.6475C 81.8901,34.9891 82.3676,35.16 83.0009,35.16C 83.2892,35.16 83.5717,35.1145 83.8484,35.0237C 84.1251,34.9329 84.3775,34.8125 84.6059,34.6625 Z " />
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 29.0103,50.9C 30.0459,50.9 30.8853,51.7394 30.8853,52.775C 30.8853,53.8105 30.0459,54.65 29.0103,54.65C 27.9748,54.65 27.1353,53.8105 27.1353,52.775C 27.1353,51.7394 27.9748,50.9 29.0103,50.9 Z " />
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 38.8576,50.9C 39.8931,50.9 40.7326,51.7394 40.7326,52.775C 40.7326,53.8105 39.8931,54.65 38.8576,54.65C 37.822,54.65 36.9826,53.8105 36.9826,52.775C 36.9826,51.7394 37.822,50.9 38.8576,50.9 Z " />
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 48.7048,50.9C 49.7403,50.9 50.5798,51.7394 50.5798,52.775C 50.5798,53.8105 49.7403,54.65 48.7048,54.65C 47.6693,54.65 46.8298,53.8105 46.8298,52.775C 46.8298,51.7394 47.6693,50.9 48.7048,50.9 Z " />
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 58.552,50.9C 59.5876,50.9 60.427,51.7394 60.427,52.775C 60.427,53.8105 59.5876,54.65 58.552,54.65C 57.5165,54.65 56.677,53.8105 56.677,52.775C 56.677,51.7394 57.5165,50.9 58.552,50.9 Z " />
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 68.3992,50.9C 69.4348,50.9 70.2742,51.7394 70.2742,52.775C 70.2742,53.8105 69.4348,54.65 68.3992,54.65C 67.3637,54.65 66.5242,53.8105 66.5242,52.775C 66.5242,51.7394 67.3637,50.9 68.3992,50.9 Z " />
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 78.2464,50.9C 79.282,50.9 80.1214,51.7394 80.1214,52.775C 80.1214,53.8105 79.282,54.65 78.2464,54.65C 77.2109,54.65 76.3714,53.8105 76.3714,52.775C 76.3714,51.7394 77.2109,50.9 78.2464,50.9 Z " />
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 19.1631,50.9C 20.1987,50.9 21.0381,51.7394 21.0381,52.775C 21.0381,53.8105 20.1987,54.65 19.1631,54.65C 18.1276,54.65 17.2881,53.8105 17.2881,52.775C 17.2881,51.7394 18.1276,50.9 19.1631,50.9 Z " />
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 9.31592,50.9C 10.3515,50.9 11.1909,51.7394 11.1909,52.775C 11.1909,53.8105 10.3515,54.65 9.31592,54.65C 8.28036,54.65 7.44092,53.8105 7.44092,52.775C 7.44092,51.7394 8.28036,50.9 9.31592,50.9 Z " />
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 88.0937,50.9C 89.1292,50.9 89.9687,51.7394 89.9687,52.775C 89.9687,53.8105 89.1292,54.65 88.0937,54.65C 87.0581,54.65 86.2187,53.8105 86.2187,52.775C 86.2187,51.7394 87.0581,50.9 88.0937,50.9 Z " />
+									<GeometryDrawing
+										Brush="#FF45789D"
+										Geometry="F1 M 97.9409,50.9C 98.9764,50.9 99.8159,51.7394 99.8159,52.775C 99.8159,53.8105 98.9764,54.65 97.9409,54.65C 96.9053,54.65 96.0659,53.8105 96.0659,52.775C 96.0659,51.7394 96.9053,50.9 97.9409,50.9 Z " />
+								</DrawingGroup.Children>
+							</DrawingGroup>
+						</DrawingBrush.Drawing>
+					</DrawingBrush>
+				</Rectangle.Fill>
+			</Rectangle>
+
+			<Ellipse
+				x:Name="ellipse"
+				Height="3.75"
+				Width="3.75"
+				HorizontalAlignment="Left"
+				Margin="7.609,0,0,11.146"
+				VerticalAlignment="Bottom"
+				Fill="#FFFBFBFB" />
+
+			<Ellipse
+				x:Name="ellipse1"
+				Height="3.75"
+				Width="3.75"
+				HorizontalAlignment="Left"
+				Margin="17.314,0,0,11.146"
+				VerticalAlignment="Bottom"
+				Fill="#FFFBFBFB" />
+
+			<Ellipse
+				x:Name="ellipse2"
+				Height="3.75"
+				Width="3.75"
+				HorizontalAlignment="Left"
+				Margin="27,0,0,11.146"
+				VerticalAlignment="Bottom"
+				Fill="#FFFBFBFB" />
+
+			<Ellipse
+				x:Name="ellipse3"
+				Height="3.75"
+				Width="3.75"
+				HorizontalAlignment="Left"
+				Margin="36.705,0,0,11.146"
+				VerticalAlignment="Bottom"
+				Fill="#FFFBFBFB" />
+
+			<Ellipse
+				x:Name="ellipse4"
+				Height="3.75"
+				Width="3.75"
+				HorizontalAlignment="Left"
+				Margin="46.391,0,0,11.146"
+				VerticalAlignment="Bottom"
+				Fill="#FFFBFBFB" />
+
+			<Ellipse
+				x:Name="ellipse5"
+				Height="3.75"
+				Width="3.75"
+				HorizontalAlignment="Right"
+				Margin="0,0,45.654,11.146"
+				VerticalAlignment="Bottom"
+				Fill="#FFFBFBFB" />
+
+			<Ellipse
+				x:Name="ellipse6"
+				Height="3.75"
+				Width="3.75"
+				HorizontalAlignment="Right"
+				Margin="0,0,35.949,11.146"
+				VerticalAlignment="Bottom"
+				Fill="#FFFBFBFB" />
+
+			<Ellipse
+				x:Name="ellipse7"
+				Height="3.75"
+				Width="3.75"
+				HorizontalAlignment="Right"
+				Margin="0,0,26.263,11.146"
+				VerticalAlignment="Bottom"
+				Fill="#FFFBFBFB" />
+
+			<Ellipse
+				x:Name="ellipse8"
+				Height="3.75"
+				Width="3.75"
+				HorizontalAlignment="Right"
+				Margin="0,0,16.558,11.146"
+				VerticalAlignment="Bottom"
+				Fill="#FFFBFBFB" />
+
+			<Ellipse
+				x:Name="ellipse9"
+				Height="3.75"
+				Width="3.75"
+				HorizontalAlignment="Right"
+				Margin="0,0,6.853,11.146"
+				VerticalAlignment="Bottom"
+				Fill="#FFFBFBFB" />
+		</Grid>
+
+	</Grid>
+</UserControl>
