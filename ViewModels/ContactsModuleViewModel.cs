@@ -5,6 +5,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	using System.Collections.Generic;
 	using System.ComponentModel.Composition;
 	using System.Configuration;
+	using System.Diagnostics.Contracts;
 	using System.Linq;
 	using System.Reactive;
 	using System.Reactive.Linq;
@@ -44,47 +45,13 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		[ImportingConstructor]
 		public ContactsModuleViewModel(IEventAggregator events)
 		{
+			Contract.Requires(events != null, "Events can not be null.");
 			events.Subscribe(this);
 
-			var canAddPerson = this.WhenAny(x => x.Navigation, x => x.ActiveModuleName,
-				(b, u) => !string.Equals(u.Value, ADD_PERSON));
-
-			this.Add = new ReactiveAsyncCommand(canAddPerson);
-			this.Add
-				.Subscribe((arg) => 
-				{
-					this._activeModuleName = ADD_PERSON;
-					this.LoadViewModelFromActiveModuleName(); 
-				});
-
-			var canEditPerson = this.WhenAny(x => x.ActiveModuleName, x => x.SelectedPerson,
-				(b, u) => u.Value != null && string.Equals(b.Value, GROUPS));
-
-			this.Edit = new ReactiveAsyncCommand(canEditPerson);
-			this.Edit
-				.Subscribe((arg) =>
-				{
-					this._activeModuleName = EDIT_PERSON;
-					this.LoadViewModelFromActiveModuleName();
-				});
-
-			var canOk = this.WhenAny(x => x.Navigation, x => x.ActiveModuleName,
-				(b, u) => b.Value.Count() > 1 && !string.Equals(u.Value, GROUPS));
-
-			this.NavigateBack = new ReactiveAsyncCommand(canOk);
-			this.NavigateBack
-				.Subscribe(
-					(obj) =>
-					{
-						int secondedToLast = this._Navigation.Count() - 2;
-						this._activeModuleName = this._Navigation[secondedToLast];
-						this._Navigation.RemoveAt(this._Navigation.Count() - 1);
-						this.LoadViewModelFromActiveModuleName();
-					});
-
-			// Default children
-			this._activeModuleName = GROUPS;
-			this.LoadViewModelFromActiveModuleName();
+			this.SetupAddCommand();
+			this.SetupEditCommand();
+			this.SetupNavigationCommand();
+			this.InitializeDefaults();
 		}
 
 		public string ActiveModuleName
@@ -151,6 +118,8 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 		public void Handle(SelectedPersonEvent selectedPersonEvent)
 		{
+			Contract.Requires(selectedPersonEvent != null, "Selected person event can not be null.");
+
 			if (this.SelectedPerson != selectedPersonEvent.SelectedContacts)
 			{
 				this._cachedViews.Remove(EDIT_PERSON);
@@ -203,6 +172,56 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			this._Navigation.Add(this._activeModuleName);
 			this.RaisePropertyChanged(x => x.ActiveModuleName);
 			this.RaisePropertyChanged(x => x.Navigation);
+		}
+
+		private void SetupAddCommand()
+		{
+			var canAddPerson = this.WhenAny(x => x.Navigation, x => x.ActiveModuleName,
+				(b, u) => !string.Equals(u.Value, ADD_PERSON));
+
+			this.Add = new ReactiveAsyncCommand(canAddPerson);
+			this.Add
+				.Subscribe((arg) =>
+				{
+					this._activeModuleName = ADD_PERSON;
+					this.LoadViewModelFromActiveModuleName();
+				});
+		}
+
+		private void SetupEditCommand()
+		{
+			var canEditPerson = this.WhenAny(x => x.ActiveModuleName, x => x.SelectedPerson,
+				(b, u) => u.Value != null && string.Equals(b.Value, GROUPS));
+
+			this.Edit = new ReactiveAsyncCommand(canEditPerson);
+			this.Edit
+				.Subscribe((arg) =>
+				{
+					this._activeModuleName = EDIT_PERSON;
+					this.LoadViewModelFromActiveModuleName();
+				});
+		}
+
+		private void SetupNavigationCommand()
+		{
+			var canOk = this.WhenAny(x => x.Navigation, x => x.ActiveModuleName,
+				(b, u) => b.Value.Count() > 1 && !string.Equals(u.Value, GROUPS));
+
+			this.NavigateBack = new ReactiveAsyncCommand(canOk);
+			this.NavigateBack
+				.Subscribe((obj) =>
+				{
+					int secondedToLast = this._Navigation.Count() - 2;
+					this._activeModuleName = this._Navigation[secondedToLast];
+					this._Navigation.RemoveAt(this._Navigation.Count() - 1);
+					this.LoadViewModelFromActiveModuleName();
+				});
+		}
+
+		private void InitializeDefaults()
+		{
+			this._activeModuleName = GROUPS;
+			this.LoadViewModelFromActiveModuleName();
 		}
 	}
 }
