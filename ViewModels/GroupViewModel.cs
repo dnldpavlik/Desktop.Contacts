@@ -1,6 +1,7 @@
 
 namespace DonPavlik.Desktop.Contacts.ViewModels
 {
+	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel.Composition;
 	using Caliburn.Micro;
@@ -16,7 +17,8 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	public class GroupViewModel : 
 		ReactiveObject, 
 		IHandle<SaveEvent>, 
-		IGroupViewModel
+		IGroupViewModel, 
+		IDisposable
 	{
 		#region Private Constants and Fields
 
@@ -37,7 +39,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 		private object _ActiveItem;
 
-		private readonly ReactiveAsyncCommand ShowCommand; 
+		private ReactiveAsyncCommand ShowCommand; 
 
 		#endregion
 
@@ -58,7 +60,15 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 			this.ShowPeople();
 		}
-		
+
+		/// <summary>
+		/// Finalizes an instance of the GroupViewModel class.
+		/// </summary>
+		~GroupViewModel()
+		{
+			this.Dispose(false);
+		}
+
 		#region Public Properties
 
 		/// <summary>
@@ -133,8 +143,30 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			this._cachedViews.Remove(PEOPLE);
 			this.LoadViewModelFromActiveModuleName();
 		}
-		
+
+		/// <summary>
+		/// Disposes all references so that this object can be cleaned up through GC
+		/// </summary>
+		public void Dispose()
+		{
+			this.Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
 		#endregion
+
+		/// <summary>
+		/// Disposes the managed and unmanaged resources tied to this view model
+		/// </summary>
+		/// <param name="disposing"></param>
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				this.ShowCommand.Dispose();
+				this.ShowCommand = null;
+			}
+		}
 
 		private void LoadViewModel(object obj)
 		{
