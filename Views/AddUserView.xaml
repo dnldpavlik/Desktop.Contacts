@@ -226,7 +226,8 @@
 				x:Name="Save"
 				Content="Save"
 				IsDefault="True"
-				Margin="20" />
+				Margin="20" 
+				Command="{Binding SaveCommand}"/>
 		</StackPanel>
 		<!--EndRegion-->
 		

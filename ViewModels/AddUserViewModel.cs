@@ -2,6 +2,7 @@
 namespace DonPavlik.Desktop.Contacts.ViewModels
 {
 	using System;
+	using System.Linq;
 	using System.ComponentModel.Composition;
 	using Caliburn.Micro;
 	using DonPavlik.Desktop.Contacts.Events;
@@ -12,12 +13,15 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	using DonPavlik.WikiRepository.Interfaces;
 	using Microsoft.Win32;
 	using ReactiveUI;
+	using ReactiveUI.Xaml;
 
 	/// <summary>
 	/// Add user view model defintion that describes the input needed to create a user.
 	/// </summary>
 	[Export(typeof(IAddUserViewModel)), PartCreationPolicy(CreationPolicy.NonShared)]
-	public class AddUserViewModel : ReactiveObject, IAddUserViewModel
+	public class AddUserViewModel : 
+		ReactiveObject, 
+		IAddUserViewModel
 	{
 		private const string ADD_CONTACT = "Add Person";
 
@@ -53,6 +57,16 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			Contact contact = new Contact(new Person());
 			this.PersonPreview = new ContactViewModel(contact);
 			this.Caption = ADD_CONTACT;
+
+			var canSave = this.WhenAny(x => x.FullName, x => x.EMailAddress,
+				(b, u) => string.IsNullOrWhiteSpace(b.Value));
+
+			this.SaveCommand= new ReactiveCommand(canSave);
+			this.SaveCommand
+				.Subscribe((obj) =>
+					{
+						this.Save();
+					});
 		}
 
 		/// <summary>
@@ -185,10 +199,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		public ContactViewModel PersonPreview { get; set; }
 
 		/// <summary>
-		/// Saves the changes to the contact repository. Sends the save event 
-		/// that save was successful.
+		/// Saves the changes to the contact repository.
 		/// </summary>
-		public void Save()
+		private void Save()
 		{
 			if (string.Equals(EDIT_CONTACT, this.Caption))
 			{
@@ -198,12 +211,6 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			{
 				this._contactRepo.Add(this.PersonPreview.Contact);
 			}
-
-			this._events.Publish(
-				new SaveEvent
-				{
-					Message = "Saved Contact " + this.PersonPreview.FullName
-				});
 		}
 
 		/// <summary>
@@ -234,5 +241,10 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			this._FullName = selectedContact.PrimaryName.FullName;
 			this.Caption = EDIT_CONTACT;
 		}
+
+		/// <summary>
+		/// Gets or sets the Save Command
+		/// </summary>
+		public ReactiveCommand SaveCommand { get; private set; }
 	}
 }

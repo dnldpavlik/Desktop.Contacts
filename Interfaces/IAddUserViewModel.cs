@@ -2,6 +2,7 @@
 namespace DonPavlik.Desktop.Contacts.Interfaces
 {
 	using DonPavlik.Domain.Interfaces.Roles;
+	using ReactiveUI.Xaml;
 
 	/// <summary>
 	/// Interface definition for the add user view model
@@ -15,5 +16,10 @@ namespace DonPavlik.Desktop.Contacts.Interfaces
 		/// <param name="selectedContact">The selected contact to 
 		/// be edited</param>
 		void EditExistingContact(IContact selectedContact);
+
+		/// <summary>
+		/// Gets or sets the Save Command
+		/// </summary>
+		ReactiveCommand SaveCommand { get; }
 	}
 }

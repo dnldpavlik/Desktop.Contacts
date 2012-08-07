@@ -8,8 +8,6 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	/// </summary>
 	public class OrganizationViewModel
 	{
-		private IOrganization _organization;
-
 		/// <summary>
 		/// Creasts an instance of the <see cref="OrganizationViewModel"/> class.
 		/// </summary>
@@ -18,7 +16,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// </param>
 		public OrganizationViewModel(IOrganization organization)
 		{
-			this._organization = organization;
+			this.Organization = organization;
 		}
 
 		/// <summary>
@@ -28,8 +26,14 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		{
 			get
 			{
-				return this._organization.Name;
+				return this.Organization.Name;
 			}
 		}
+
+		/// <summary>
+		/// Gets or sets the Organization
+		/// </summary>
+		public IOrganization Organization { get; set; }
+
 	}
 }

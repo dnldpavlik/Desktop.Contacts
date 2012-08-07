@@ -1,9 +1,11 @@
 ﻿
 namespace DonPavlik.Desktop.Contacts.ViewModels
 {
+	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel.Composition;
 	using System.Threading.Tasks;
+	using System.Reactive.Linq;
 	using DonPavlik.Desktop.Contacts.Interfaces;
 	using DonPavlik.Domain.Interfaces;
 	using DonPavlik.WikiRepository.Interfaces;

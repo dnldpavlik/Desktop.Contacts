@@ -82,8 +82,7 @@
     <Reference Include="System.ComponentModel.Composition.Registration" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Reactive, Version=1.1.11111.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="System.Reactive">
       <HintPath>..\..\..\Resources\Development\Frameworks\ReactiveUI\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Xaml" />
@@ -96,12 +95,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\SelectedPersonEvent.cs" />
+    <Compile Include="Interfaces\IAddOrganization.cs" />
     <Compile Include="Interfaces\IAddUserViewModel.cs" />
     <Compile Include="Interfaces\IGroupViewModel.cs" />
     <Compile Include="Interfaces\IOrganizationsViewModel.cs" />
     <Compile Include="Interfaces\IPeopleViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Events\SaveEvent.cs" />
+    <Compile Include="ViewModels\AddOrganization.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\ContactViewModel.cs" />
     <Compile Include="ViewModels\ContactsModuleViewModel.cs" />
@@ -177,6 +177,10 @@
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

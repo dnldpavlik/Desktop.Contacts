@@ -22,7 +22,6 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	public class ContactsModuleViewModel : 
 		ReactiveObject, 
 		IModule, 
-		IHandle<SaveEvent>,
 		IHandle<SelectedPersonEvent>
 	{
 		#region Private Constants and Fields
@@ -91,7 +90,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// <summary>
 		/// Gets the Navigation back command that controls moving backwards.
 		/// </summary>
-		public ReactiveAsyncCommand NavigateBack
+		public ReactiveCommand NavigateBack
 		{
 			get;
 			protected set;
@@ -101,7 +100,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// Gets the add command that shows the add view for the active
 		/// subject matter.
 		/// </summary>
-		public ReactiveAsyncCommand Add
+		public ReactiveCommand Add
 		{
 			get;
 			protected set;
@@ -111,7 +110,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// Gets the edit command that shows the edit view for the active
 		/// subject matter.
 		/// </summary>
-		public ReactiveAsyncCommand Edit
+		public ReactiveCommand Edit
 		{
 			get;
 			protected set;
@@ -167,17 +166,6 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// Handles the save event, used to force updates for the subject 
-		/// list view.
-		/// </summary>
-		/// <param name="saveEvent">Save event</param>
-		public void Handle(SaveEvent saveEvent)
-		{
-			this._cachedViews.Remove(ADD_PERSON);
-			this.NavigateBack.Execute(null);
-		}
-		
 		#region Private Methods
 
 		private void LoadViewModelFromActiveModuleName()
@@ -187,17 +175,27 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 				case ADD_PERSON:
 					if (!this._cachedViews.ContainsKey(ADD_PERSON))
 					{
+						IAddUserViewModel addPerson = IoC.Get<IAddUserViewModel>();
+						addPerson.SaveCommand
+							.Subscribe((obj) =>
+								{
+									this.HandleSavePerson();
+								});
+
 						this._cachedViews.Add(
 							ADD_PERSON,
-							IoC.Get<IAddUserViewModel>());
+							addPerson);
 					}
 					break;
 				case EDIT_PERSON:
 					if (!this._cachedViews.ContainsKey(EDIT_PERSON))
 					{
-						IAddUserViewModel editPerson = 
-							IoC.Get<IAddUserViewModel>();
-
+						IAddUserViewModel editPerson = IoC.Get<IAddUserViewModel>();
+						editPerson.SaveCommand
+							.Subscribe((obj) =>
+							{
+								this.HandleSavePerson();
+							});
 						editPerson.EditExistingContact(this.SelectedPerson);
 
 						this._cachedViews.Add(
@@ -208,9 +206,11 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 				default:
 					if (!this._cachedViews.ContainsKey(GROUPS))
 					{
+						IGroupViewModel groupView = IoC.Get<IGroupViewModel>();
+
 						this._cachedViews.Add(
 							GROUPS,
-							IoC.Get<IGroupViewModel>());
+							groupView);
 					}
 					break;
 			}
@@ -221,12 +221,26 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			this.RaisePropertyChanged(x => x.Navigation);
 		}
 
+		private void HandleSavePerson()
+		{
+			this._cachedViews.Remove(ADD_PERSON);
+			this.NavigateBack.Execute(null);
+
+			if (!this._cachedViews.ContainsKey(GROUPS))
+			{
+				IGroupViewModel groupView =
+					this._cachedViews[GROUPS] as IGroupViewModel;
+
+				groupView.HandleSave();
+			}
+		}
+
 		private void SetupAddCommand()
 		{
 			var canAddPerson = this.WhenAny(x => x.Navigation, x => x.ActiveModuleName,
 				(b, u) => !string.Equals(u.Value, ADD_PERSON));
 
-			this.Add = new ReactiveAsyncCommand(canAddPerson);
+			this.Add = new ReactiveCommand(canAddPerson);
 			this.Add
 				.Subscribe((arg) =>
 				{
@@ -240,7 +254,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			var canEditPerson = this.WhenAny(x => x.ActiveModuleName, x => x.SelectedPerson,
 				(b, u) => u.Value != null && string.Equals(b.Value, GROUPS));
 
-			this.Edit = new ReactiveAsyncCommand(canEditPerson);
+			this.Edit = new ReactiveCommand(canEditPerson);
 			this.Edit
 				.Subscribe((arg) =>
 				{
@@ -254,7 +268,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			var canOk = this.WhenAny(x => x.Navigation, x => x.ActiveModuleName,
 				(b, u) => b.Value.Count() > 1 && !string.Equals(u.Value, GROUPS));
 
-			this.NavigateBack = new ReactiveAsyncCommand(canOk);
+			this.NavigateBack = new ReactiveCommand(canOk);
 			this.NavigateBack
 				.Subscribe((obj) =>
 				{

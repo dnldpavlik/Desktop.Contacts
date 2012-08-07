@@ -13,12 +13,10 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	/// <summary>
 	/// Group view model class definition
 	/// </summary>
-	[Export(typeof(IGroupViewModel))]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable"), Export(typeof(IGroupViewModel))]
 	public class GroupViewModel : 
 		ReactiveObject, 
-		IHandle<SaveEvent>, 
-		IGroupViewModel, 
-		IDisposable
+		IGroupViewModel
 	{
 		#region Private Constants and Fields
 
@@ -59,14 +57,6 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 				.RegisterAsyncAction(this.LoadViewModel);
 
 			this.ShowPeople();
-		}
-
-		/// <summary>
-		/// Finalizes an instance of the GroupViewModel class.
-		/// </summary>
-		~GroupViewModel()
-		{
-			this.Dispose(false);
 		}
 
 		#region Public Properties
@@ -138,35 +128,13 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// <param name="saveEvent">
 		/// Save event
 		/// </param>
-		public void Handle(SaveEvent saveEvent)
+		public void HandleSave()
 		{
 			this._cachedViews.Remove(PEOPLE);
 			this.LoadViewModelFromActiveModuleName();
 		}
 
-		/// <summary>
-		/// Disposes all references so that this object can be cleaned up through GC
-		/// </summary>
-		public void Dispose()
-		{
-			this.Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
 		#endregion
-
-		/// <summary>
-		/// Disposes the managed and unmanaged resources tied to this view model
-		/// </summary>
-		/// <param name="disposing"></param>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				this.ShowCommand.Dispose();
-				this.ShowCommand = null;
-			}
-		}
 
 		private void LoadViewModel(object obj)
 		{
