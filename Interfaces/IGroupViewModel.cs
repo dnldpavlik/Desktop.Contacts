@@ -1,4 +1,5 @@
 ﻿
+using System;
 namespace DonPavlik.Desktop.Contacts.Interfaces
 {
 	/// <summary>
@@ -13,5 +14,15 @@ namespace DonPavlik.Desktop.Contacts.Interfaces
 		/// Save event
 		/// </param>
 		void HandleSave();
+
+		/// <summary>
+		/// Gets the active module name (Should be view)
+		/// </summary>
+		string ActiveModuleName { get; }
+
+		/// <summary>
+		/// Gets or sets the selected contact item
+		/// </summary>
+		IObservable<object> SelectedContactItem { get; set; }
 	}
 }

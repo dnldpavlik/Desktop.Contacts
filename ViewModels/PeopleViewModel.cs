@@ -1,6 +1,7 @@
 ﻿
 namespace DonPavlik.Desktop.Contacts.ViewModels
 {
+	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel.Composition;
 	using System.Threading.Tasks;
@@ -33,6 +34,8 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		public PeopleViewModel(IEventAggregator eventAggregator)
 		{
 			this._eventAggregator = eventAggregator;
+
+
 		}
 
 		/// <summary>

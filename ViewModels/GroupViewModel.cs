@@ -20,10 +20,6 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	{
 		#region Private Constants and Fields
 
-		private const string PEOPLE = "People";
-
-		private const string ORGANIZATION = "Organizations";
-
 		private readonly Dictionary<string, object> _cachedViews =
 			new Dictionary<string, object>();
 
@@ -99,7 +95,12 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 				this.RaisePropertyChanged(t => t.ActiveItem);
 			}
 		}
-		
+
+		/// <summary>
+		/// Gets or sets the selected contact item
+		/// </summary>
+		public IObservable<object> SelectedContactItem { get; set; }
+
 		#endregion
 		
 		#region Public Methods
@@ -110,7 +111,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// </summary>
 		public void ShowPeople()
 		{
-			this.ShowCommand.Execute(PEOPLE);
+			this.ShowCommand.Execute(ViewNames.PEOPLE);
 		}
 
 		/// <summary>
@@ -119,7 +120,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// </summary>
 		public void ShowOrganizations()
 		{
-			this.ShowCommand.Execute(ORGANIZATION);
+			this.ShowCommand.Execute(ViewNames.ORGANIZATION);
 		}
 
 		/// <summary>
@@ -130,7 +131,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// </param>
 		public void HandleSave()
 		{
-			this._cachedViews.Remove(PEOPLE);
+			this._cachedViews.Remove(ViewNames.PEOPLE);
 			this.LoadViewModelFromActiveModuleName();
 		}
 
@@ -148,19 +149,19 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			this.RaisePropertyChanged(t => t.Processing);
 			switch (this.ActiveModuleName)
 			{
-				case PEOPLE:
-					if (!this._cachedViews.ContainsKey(PEOPLE))
+				case ViewNames.PEOPLE:
+					if (!this._cachedViews.ContainsKey(ViewNames.PEOPLE))
 					{
 						this._cachedViews.Add(
-							PEOPLE,
+							ViewNames.PEOPLE,
 							IoC.Get<IPeopleViewModel>());
 					}
 					break;
 				default:
-					if (!this._cachedViews.ContainsKey(ORGANIZATION))
+					if (!this._cachedViews.ContainsKey(ViewNames.ORGANIZATION))
 					{
 						this._cachedViews.Add(
-							ORGANIZATION, 
+							ViewNames.ORGANIZATION, 
 							IoC.Get<IOrganizationsViewModel>());
 					}
 					break;

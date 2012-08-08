@@ -33,8 +33,6 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 		private readonly IRepository<IContact> _contactRepo;
 
-		private readonly IEventAggregator _events;
-
 		private string _FullName;
 
 		/// <summary>
@@ -47,26 +45,15 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// Event aggregator used for sending of events.
 		/// </param>
 		[ImportingConstructor]
-		public AddUserViewModel(
-			IRepository<IContact> contactRepo,
-			IEventAggregator events)
+		public AddUserViewModel(IRepository<IContact> contactRepo)
 		{
-			this._events = events;
 			this._contactRepo = contactRepo;
 
 			Contact contact = new Contact(new Person());
 			this.PersonPreview = new ContactViewModel(contact);
 			this.Caption = ADD_CONTACT;
 
-			var canSave = this.WhenAny(x => x.FullName, x => x.EMailAddress,
-				(b, u) => string.IsNullOrWhiteSpace(b.Value));
-
-			this.SaveCommand= new ReactiveCommand(canSave);
-			this.SaveCommand
-				.Subscribe((obj) =>
-					{
-						this.Save();
-					});
+			this.SetupSaveCommand();
 		}
 
 		/// <summary>
@@ -246,5 +233,18 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// Gets or sets the Save Command
 		/// </summary>
 		public ReactiveCommand SaveCommand { get; private set; }
+
+		private void SetupSaveCommand()
+		{
+			var canSave = this.WhenAny(x => x.FullName, x => x.EMailAddress,
+				(b, u) => string.IsNullOrWhiteSpace(b.Value));
+
+			this.SaveCommand = new ReactiveCommand(canSave);
+			this.SaveCommand
+				.Subscribe((obj) =>
+				{
+					this.Save();
+				});
+		}
 	}
 }
