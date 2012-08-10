@@ -1,13 +1,15 @@
 ﻿
 namespace DonPavlik.Desktop.Contacts.Interfaces
 {
+	using System.ComponentModel;
 	using DonPavlik.Domain.Interfaces.Roles;
+	using ReactiveUI;
 	using ReactiveUI.Xaml;
 
 	/// <summary>
 	/// Interface definition for the add user view model
 	/// </summary>
-	public interface IAddUserViewModel
+	public interface IAddPersonViewModel
 	{
 		/// <summary>
 		/// Hydrates the add user view model with the contact that is 

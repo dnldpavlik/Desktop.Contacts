@@ -13,7 +13,7 @@ namespace DonPavlik.Desktop.Contacts.Interfaces
 		/// <param name="saveEvent">
 		/// Save event
 		/// </param>
-		void HandleSave();
+		void HandleSave(string saveType);
 
 		/// <summary>
 		/// Gets the active module name (Should be view)

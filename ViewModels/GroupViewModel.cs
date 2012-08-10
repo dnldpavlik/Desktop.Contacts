@@ -129,9 +129,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// <param name="saveEvent">
 		/// Save event
 		/// </param>
-		public void HandleSave()
+		public void HandleSave(string saveType)
 		{
-			this._cachedViews.Remove(ViewNames.PEOPLE);
+			this._cachedViews.Remove(saveType);
 			this.LoadViewModelFromActiveModuleName();
 		}
 

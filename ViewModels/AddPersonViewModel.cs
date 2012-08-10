@@ -18,10 +18,10 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	/// <summary>
 	/// Add user view model defintion that describes the input needed to create a user.
 	/// </summary>
-	[Export(typeof(IAddUserViewModel)), PartCreationPolicy(CreationPolicy.NonShared)]
-	public class AddUserViewModel : 
+	[Export(typeof(IAddPersonViewModel)), PartCreationPolicy(CreationPolicy.NonShared)]
+	public class AddPersonViewModel : 
 		ReactiveObject, 
-		IAddUserViewModel
+		IAddPersonViewModel
 	{
 		private const string ADD_CONTACT = "Add Person";
 
@@ -36,7 +36,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		private string _FullName;
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="AddUserViewModel"/> class.
+		/// Initializes a new instance of <see cref="AddPersonViewModel"/> class.
 		/// </summary>
 		/// <param name="contactRepo">
 		/// The contact repository
@@ -45,7 +45,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// Event aggregator used for sending of events.
 		/// </param>
 		[ImportingConstructor]
-		public AddUserViewModel(IRepository<IContact> contactRepo)
+		public AddPersonViewModel(IRepository<IContact> contactRepo)
 		{
 			this._contactRepo = contactRepo;
 

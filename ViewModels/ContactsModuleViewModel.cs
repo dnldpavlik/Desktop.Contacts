@@ -10,6 +10,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	using DonPavlik.Desktop.Contacts.Events;
 	using DonPavlik.Desktop.Contacts.Interfaces;
 	using DonPavlik.Desktop.Infrastructure.Interfaces;
+	using DonPavlik.Domain.Interfaces;
 	using DonPavlik.Domain.Interfaces.Roles;
 	using ReactiveUI;
 	using ReactiveUI.Xaml;
@@ -21,21 +22,13 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	[Export(typeof(IModule))]
 	public class ContactsModuleViewModel : 
 		ReactiveObject, 
-		IModule, 
-		IHandle<SelectedPersonEvent>
+		IModule
 	{
 		#region Private Constants and Fields
 
 		private object _ActiveItem;
 
-		private readonly Dictionary<string, object> _cachedViews =
-			new Dictionary<string, object>();
-
-		private ObservableAsPropertyHelper<string> _ActiveModuleName;
-
-		private IContact _SelectedPerson;
-
-		private ReactiveCollection<string> _Navigation = new ReactiveCollection<string>(); 
+		private readonly IViewFactory _ViewFactory;
 
 		#endregion
 
@@ -46,12 +39,10 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// Event aggregator for dealing with external events.
 		/// </param>
 		[ImportingConstructor]
-		public ContactsModuleViewModel(IEventAggregator events)
+		public ContactsModuleViewModel(IViewFactory viewFactory)
 		{
-			Contract.Requires(events != null, "Events can not be null.");
-			events.Subscribe(this);
-
-			this.InitializeDefaults();
+			Contract.Requires(viewFactory != null, "View Factory can not be null.");
+			this._ViewFactory = viewFactory;
 
 			this.SetupAddCommand();
 			this.SetupEditCommand();
@@ -59,28 +50,6 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		}
 		
 		#region Public Properties
-
-		/// <summary>
-		/// Gets the active module name (Should be view name)
-		/// </summary>
-		public string ActiveModuleName
-		{
-			get
-			{
-				return this._ActiveModuleName.Value;
-			}
-		}
-
-		/// <summary>
-		/// Gets the Navigation for this module. 
-		/// </summary>
-		public ReactiveCollection<string> Navigation
-		{
-			get
-			{
-				return this._Navigation;
-			}
-		}
 
 		/// <summary>
 		/// Gets the Navigation back command that controls moving backwards.
@@ -120,7 +89,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			{
 				if (this._ActiveItem == null)
 				{
-					this._ActiveItem = this.GetGroupView();
+					this._ActiveItem = this._ViewFactory.GetGroupView();
 				}
 
 				return this._ActiveItem;
@@ -132,189 +101,47 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
-		/// <summary>
-		/// Gets the Selected person.
-		/// </summary>
-		public IContact SelectedPerson
-		{
-			get
-			{
-				return this._SelectedPerson;
-			}
-
-			protected set
-			{
-				this.RaiseAndSetIfChanged(x => x.SelectedPerson, value);
-			}
-		}
-
-		public bool HasSelectedContactItem { get; set; }
-
 		#endregion
 
-		/// <summary>
-		/// Handles the selected person event, used enable edit functionality
-		/// of contacts.
-		/// </summary>
-		/// <param name="selectedPersonEvent">Selected person event</param>
-		public void Handle(SelectedPersonEvent selectedPersonEvent)
-		{
-			if (this.SelectedPerson != selectedPersonEvent.SelectedContacts)
-			{
-				this._cachedViews.Remove(ViewNames.EDIT_PERSON);
-				this.SelectedPerson = selectedPersonEvent.SelectedContacts;
-			}
-		}
-
 		#region Private Methods
-
-		private void LoadViewModelFromActiveModuleName()
-		{
-			switch (this.ActiveModuleName)
-			{
-				case ViewNames.ADD_PERSON:
-					this.InitializeAddPersonView();
-					break;
-				case ViewNames.EDIT_PERSON:
-					if (!this._cachedViews.ContainsKey(ViewNames.EDIT_PERSON))
-					{
-						IAddUserViewModel editPerson = IoC.Get<IAddUserViewModel>();
-						editPerson.SaveCommand
-							.Subscribe((obj) =>
-							{
-								this.HandleSavePerson(ViewNames.EDIT_PERSON);
-							});
-						editPerson.EditExistingContact(this.SelectedPerson);
-
-						this._cachedViews.Add(
-							ViewNames.EDIT_PERSON,
-							editPerson);
-					}
-					break;
-				case ViewNames.ADD_ORGANIZATION:
-					if (!this._cachedViews.ContainsKey(ViewNames.ADD_ORGANIZATION))
-					{
-						IAddOrganizationViewModel addOrganization = 
-							IoC.Get<IAddOrganizationViewModel>();
-						addOrganization.SaveCommand
-							.Subscribe((obj) =>
-							{
-								this.HandleSavePerson(ViewNames.ADD_ORGANIZATION);
-							});
-
-						this._cachedViews.Add(
-							ViewNames.ADD_ORGANIZATION,
-							addOrganization);
-					}
-					break;
-				case ViewNames.EDIT_ORGANIZATION:
-					if (!this._cachedViews.ContainsKey(ViewNames.EDIT_ORGANIZATION))
-					{
-						IAddOrganizationViewModel editOrganization = 
-							IoC.Get<IAddOrganizationViewModel>();
-						editOrganization.SaveCommand
-							.Subscribe((obj) =>
-							{
-								this.HandleSavePerson(ViewNames.EDIT_ORGANIZATION);
-							});
-						editOrganization.EditExistingOrganization(null);
-
-						this._cachedViews.Add(
-							ViewNames.EDIT_ORGANIZATION,
-							editOrganization);
-					}
-					break;
-				default:
-					this.InitializeGroupView();
-					break;
-			}
-
-			this.ActiveItem = this._cachedViews[this.ActiveModuleName];
-			this.Navigation.Add(this.ActiveModuleName);
-		}
-
-		private void InitializeAddPersonView()
-		{
-			if (!this._cachedViews.ContainsKey(ViewNames.ADD_PERSON))
-			{
-				IAddUserViewModel addPerson = IoC.Get<IAddUserViewModel>();
-				addPerson.SaveCommand
-					.Subscribe((obj) =>
-					{
-						this.HandleSavePerson(ViewNames.ADD_PERSON);
-					});
-
-				this._cachedViews.Add(
-					ViewNames.ADD_PERSON,
-					addPerson);
-			}
-		}
-
-		private void InitializeGroupView()
-		{
-			if (!this._cachedViews.ContainsKey(ViewNames.GROUPS))
-			{
-				this._cachedViews.Add(
-					ViewNames.GROUPS,
-					IoC.Get<IGroupViewModel>());
-			}
-		}
-
-		private IGroupViewModel GetGroupView()
-		{
-			return this._cachedViews[ViewNames.GROUPS] as IGroupViewModel;
-		}
-
-		private void HandleSavePerson(string viewName)
-		{
-			this._cachedViews.Remove(viewName);
-			this.NavigateBack.Execute(null);
-
-			if (!this._cachedViews.ContainsKey(ViewNames.GROUPS))
-			{
-				IGroupViewModel groupView = this.GetGroupView();
-				groupView.HandleSave();
-			}
-		}
-
-		private void SetActiveModuleNameBasedOnGroupState(string peopleName, string organizationName)
-		{
-			IGroupViewModel groupView = this.GetGroupView();
-			if (string.Equals(groupView.ActiveModuleName, ViewNames.PEOPLE))
-			{
-				this._ActiveModuleName = this
-					.WhenAny(x => x.ActiveItem, x => peopleName)
-					.ToProperty(this, x => x.ActiveModuleName);
-			}
-			else if (string.Equals(groupView.ActiveModuleName, ViewNames.ORGANIZATION))
-			{
-				this._ActiveModuleName = this
-					.WhenAny(x => x.ActiveItem, x => organizationName)
-					.ToProperty(this, x => x.ActiveModuleName);
-			}
-		}
 
 		private void SetupAddCommand()
 		{
 			var canAddPerson = this.WhenAny(x => x.ActiveItem, x => x.ActiveItem,
-				(b, u) => !string.Equals(u.Value.GetType().Name, "AddUserViewModel") &&
-					!string.Equals(u.Value.GetType().Name, "AddOrganizationViewModel") );
+				(b, u) => string.Equals(u.Value.GetType().Name, "GroupViewModel") );
 
 			this.Add = new ReactiveCommand(canAddPerson);
 			this.Add
 				.Subscribe((arg) =>
 				{
-					IGroupViewModel groupView = this.GetGroupView();
+					IGroupViewModel groupView = this._ViewFactory.GetGroupView();
 					if (string.Equals(groupView.ActiveModuleName, ViewNames.PEOPLE))
 					{
-						this.InitializeAddPersonView();
-						this.ActiveItem = this._cachedViews[ViewNames.ADD_PERSON];
+						IAddPersonViewModel addPersonView = this._ViewFactory.GetAddPersonView();
+
+						addPersonView.SaveCommand
+							.Subscribe((obj) =>
+							{
+								this._ViewFactory.ClearView(ViewNames.ADD_PERSON);
+								groupView.HandleSave(ViewNames.PEOPLE);
+								this.NavigateBack.Execute(null);
+							});
+
+						this.ActiveItem = addPersonView;
 					}
 					else if (string.Equals(groupView.ActiveModuleName, ViewNames.ORGANIZATION))
 					{
-						this._ActiveModuleName = this
-							.WhenAny(x => x.ActiveItem, x => ViewNames.ADD_ORGANIZATION)
-							.ToProperty(this, x => x.ActiveModuleName);
+						IAddOrganizationViewModel addOrganization = this._ViewFactory.GetAddOrganizationView();
+
+						addOrganization.SaveCommand
+							.Subscribe((obj) =>
+							{
+								this._ViewFactory.ClearView(ViewNames.ADD_ORGANIZATION);
+								groupView.HandleSave(ViewNames.ORGANIZATION);
+								this.NavigateBack.Execute(null);
+							});
+
+						this.ActiveItem = addOrganization;
 					}
 				});
 		}
@@ -343,10 +170,41 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			this.Edit
 				.Subscribe((arg) =>
 				{
-					this.SetActiveModuleNameBasedOnGroupState(
-						ViewNames.EDIT_PERSON,
-						ViewNames.EDIT_ORGANIZATION);
-					this.LoadViewModelFromActiveModuleName();
+					IGroupViewModel groupView = this._ViewFactory.GetGroupView();
+					if (string.Equals(groupView.ActiveModuleName, ViewNames.PEOPLE))
+					{
+						IAddPersonViewModel addPersonView = this._ViewFactory.GetEditPersonView();
+
+						addPersonView.EditExistingContact(
+							groupView.SelectedContactItem as IContact);
+
+						addPersonView.SaveCommand
+							.Subscribe((obj) =>
+							{
+								this._ViewFactory.ClearView(ViewNames.EDIT_PERSON);
+								groupView.HandleSave(ViewNames.PEOPLE);
+								this.NavigateBack.Execute(null);
+							});
+
+						this.ActiveItem = addPersonView;
+					}
+					else if (string.Equals(groupView.ActiveModuleName, ViewNames.ORGANIZATION))
+					{
+						IAddOrganizationViewModel addOrganization = this._ViewFactory.GetEditOrganizationView();
+
+						addOrganization.EditExistingOrganization(
+							groupView.SelectedContactItem as IOrganization);
+
+						addOrganization.SaveCommand
+							.Subscribe((obj) =>
+							{
+								this._ViewFactory.ClearView(ViewNames.EDIT_ORGANIZATION);
+								groupView.HandleSave(ViewNames.ORGANIZATION);
+								this.NavigateBack.Execute(null);
+							});
+
+						this.ActiveItem = addOrganization;
+					}
 				});
 		}
 
@@ -359,16 +217,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			this.NavigateBack
 				.Subscribe((obj) =>
 				{
-					//this.ActiveModuleName = ViewNames.GROUPS;
-					//this.LoadViewModelFromActiveModuleName();
-					this.ActiveItem = this._cachedViews[ViewNames.GROUPS];
+					this.ActiveItem = this._ViewFactory.GetGroupView();
 				});
 		}
-
-		private void InitializeDefaults()
-		{
-			this.InitializeGroupView();
-		} 
 
 		#endregion
 	}
