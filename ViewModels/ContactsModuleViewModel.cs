@@ -118,6 +118,11 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		{
 			get
 			{
+				if (this._ActiveItem == null)
+				{
+					this._ActiveItem = this.GetGroupView();
+				}
+
 				return this._ActiveItem;
 			}
 
@@ -220,12 +225,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 					}
 					break;
 				default:
-					if (!this._cachedViews.ContainsKey(ViewNames.GROUPS))
-					{
-						this._cachedViews.Add(
-							ViewNames.GROUPS,
-							IoC.Get<IGroupViewModel>());
-					}
+					this.InitializeGroupView();
 					break;
 			}
 
@@ -247,6 +247,16 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 				this._cachedViews.Add(
 					ViewNames.ADD_PERSON,
 					addPerson);
+			}
+		}
+
+		private void InitializeGroupView()
+		{
+			if (!this._cachedViews.ContainsKey(ViewNames.GROUPS))
+			{
+				this._cachedViews.Add(
+					ViewNames.GROUPS,
+					IoC.Get<IGroupViewModel>());
 			}
 		}
 
@@ -311,8 +321,23 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 		private void SetupEditCommand()
 		{
-			var canEditPerson = this.WhenAny(x => x.ActiveModuleName, x => x.HasSelectedContactItem,
-				(b, u) => u.Value != false && string.Equals(b.Value, ViewNames.GROUPS));
+			var canEditPerson = this.WhenAny(x => x.ActiveItem,
+				(b) => 
+					{
+						IGroupViewModel groupViewModel = b.Value as IGroupViewModel;
+
+						if (groupViewModel == null)
+						{
+							return false;
+						}
+
+						if (groupViewModel.SelectedContactItem != null)
+						{
+							return true;
+						}
+
+						return false;
+					});
 
 			this.Edit = new ReactiveCommand(canEditPerson);
 			this.Edit
@@ -327,8 +352,8 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 		private void SetupNavigationCommand()
 		{
-			var canOk = this.WhenAny(x => x.ActiveItem, x => x.ActiveItem,
-				(b, u) => !string.Equals(b.Value.GetType().Name, typeof(IGroupViewModel).Name));
+			var canOk = this.WhenAny(x => x.ActiveItem,
+				(b) => !string.Equals(b.Value.GetType().Name, typeof(GroupViewModel).Name));
 
 			this.NavigateBack = new ReactiveCommand(canOk);
 			this.NavigateBack
@@ -342,11 +367,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 		private void InitializeDefaults()
 		{
-			this._ActiveModuleName = this
-				.WhenAny(x => x.ActiveItem, x => ViewNames.GROUPS)
-				.ToProperty(this, x => x.ActiveModuleName);
-
-			this.LoadViewModelFromActiveModuleName();
+			this.InitializeGroupView();
 		} 
 
 		#endregion
