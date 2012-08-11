@@ -23,10 +23,6 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		ReactiveObject, 
 		IAddPersonViewModel
 	{
-		private const string ADD_CONTACT = "Add Person";
-
-		private const string EDIT_CONTACT = "Edit Person";
-
 		private const string GENDER_MALE = "Male";
 
 		private const string GENDER_FEMALE = "Female";
@@ -51,7 +47,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 			Contact contact = new Contact(new Person());
 			this.PersonPreview = new ContactViewModel(contact);
-			this.Caption = ADD_CONTACT;
+			this.Caption = ViewNames.ADD_PERSON;
 
 			this.SetupSaveCommand();
 		}
@@ -190,7 +186,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// </summary>
 		private void Save()
 		{
-			if (string.Equals(EDIT_CONTACT, this.Caption))
+			if (string.Equals(ViewNames.EDIT_PERSON, this.Caption))
 			{
 				this._contactRepo.Update(this.PersonPreview.Contact);
 			}
@@ -226,7 +222,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		{
 			this.PersonPreview = new ContactViewModel(selectedContact);
 			this._FullName = selectedContact.PrimaryName.FullName;
-			this.Caption = EDIT_CONTACT;
+			this.Caption = ViewNames.EDIT_PERSON;
 		}
 
 		/// <summary>
@@ -239,7 +235,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			var canSave = this.WhenAny(x => x.FullName, x => x.EMailAddress,
 				(b, u) => string.IsNullOrWhiteSpace(b.Value));
 
-			this.SaveCommand = new ReactiveCommand(canSave);
+			this.SaveCommand = new ReactiveCommand();
 			this.SaveCommand
 				.Subscribe((obj) =>
 				{

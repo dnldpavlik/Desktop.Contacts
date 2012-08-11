@@ -16,13 +16,13 @@ namespace DonPavlik.Desktop.Contacts.Interfaces
 		void HandleSave(string saveType);
 
 		/// <summary>
-		/// Gets the active module name (Should be view)
+		/// Gets the active item for the group view model.
 		/// </summary>
-		string ActiveModuleName { get; }
+		object ActiveItem { get; }
 
 		/// <summary>
-		/// Gets or sets the selected contact item
+		/// Gets the selected contact item
 		/// </summary>
-		IObservable<object> SelectedContactItem { get; set; }
+		object SelectedContactItem { get; }
 	}
 }

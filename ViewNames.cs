@@ -9,22 +9,22 @@ namespace DonPavlik.Desktop.Contacts
 		/// <summary>
 		/// Add person view name
 		/// </summary>
-		public const string ADD_PERSON = "AddPerson";
+		public const string ADD_PERSON = "Add Person";
 
 		/// <summary>
 		/// Edit person view name
 		/// </summary>
-		public const string EDIT_PERSON = "EditPerson";
+		public const string EDIT_PERSON = "Edit Person";
 
 		/// <summary>
 		/// Add organization view name
 		/// </summary>
-		public const string ADD_ORGANIZATION = "AddOrganization";
+		public const string ADD_ORGANIZATION = "Add Organization";
 
 		/// <summary>
 		/// Edit Organization view name
 		/// </summary>
-		public const string EDIT_ORGANIZATION = "EditOrganization";
+		public const string EDIT_ORGANIZATION = "Edit Organization";
 
 		/// <summary>
 		/// Groups view name

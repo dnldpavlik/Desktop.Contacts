@@ -137,7 +137,9 @@
       <DependentUpon>PeopleView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Class Relationships.cd" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Desktop.Infrastructure\Desktop.Infrastructure.csproj">
       <Project>{f2ccb7df-e34a-4e93-ac49-678f191364cd}</Project>

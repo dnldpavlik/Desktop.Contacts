@@ -10,6 +10,9 @@ namespace DonPavlik.Desktop.Contacts
 	using Caliburn.Micro;
 	using DonPavlik.Desktop.Contacts.Interfaces;
 
+	/// <summary>
+	/// View factory class definition
+	/// </summary>
 	[Export(typeof(IViewFactory))]
 	public class ViewFactory : IViewFactory
 	{
@@ -46,11 +49,43 @@ namespace DonPavlik.Desktop.Contacts
 			return this._cachedViews[ViewNames.EDIT_PERSON] as IAddPersonViewModel;
 		}
 
+		public IPeopleViewModel GetPeopleView()
+		{
+			this.InitializePeopleView();
+			return this._cachedViews[ViewNames.PEOPLE] as IPeopleViewModel;
+		}
+
+		public IOrganizationsViewModel GetOrganizationView()
+		{
+			this.InitializeOrganizationView();
+			return this._cachedViews[ViewNames.ORGANIZATION] as IOrganizationsViewModel;
+		}
+
 		public void ClearView(string viewName)
 		{
 			if (this._cachedViews.ContainsKey(viewName))
 			{
 				this._cachedViews.Remove(viewName);
+			}
+		}
+
+		private void InitializeOrganizationView()
+		{
+			if (!this._cachedViews.ContainsKey(ViewNames.ORGANIZATION))
+			{
+				this._cachedViews.Add(
+					ViewNames.ORGANIZATION,
+					IoC.Get<IOrganizationsViewModel>());
+			}
+		}
+
+		private void InitializePeopleView()
+		{
+			if (!this._cachedViews.ContainsKey(ViewNames.PEOPLE))
+			{
+				this._cachedViews.Add(
+					ViewNames.PEOPLE,
+					IoC.Get<IPeopleViewModel>());
 			}
 		}
 

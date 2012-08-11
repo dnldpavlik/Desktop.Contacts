@@ -133,15 +133,15 @@
 				Height="32"
 				FontSize="20pt"
 				FontWeight="Light"
-				x:Name="ShowPeople"
 				Content="People"
+				Command="{Binding ShowPeople}"
 				Style="{DynamicResource ClearButtonOnWhite}" />
 			<Button
 				Margin="12,0,0,0"
 				Height="32"
 				FontSize="20pt"
 				FontWeight="Light"
-				x:Name="ShowOrganizations"
+				Command="{Binding ShowOrganizations}"
 				Content="Organizations"
 				Style="{DynamicResource ClearButtonOnWhite}" />
 		</StackPanel>

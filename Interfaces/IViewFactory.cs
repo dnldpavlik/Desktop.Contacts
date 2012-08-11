@@ -19,6 +19,10 @@ namespace DonPavlik.Desktop.Contacts.Interfaces
 
 		IAddPersonViewModel GetEditPersonView();
 
+		IPeopleViewModel GetPeopleView();
+
+		IOrganizationsViewModel GetOrganizationView();
+
 		void ClearView(string viewName);
 	}
 }

@@ -2,12 +2,8 @@
 namespace DonPavlik.Desktop.Contacts.ViewModels
 {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel.Composition;
 	using System.Diagnostics.Contracts;
-	using System.Linq;
-	using Caliburn.Micro;
-	using DonPavlik.Desktop.Contacts.Events;
 	using DonPavlik.Desktop.Contacts.Interfaces;
 	using DonPavlik.Desktop.Infrastructure.Interfaces;
 	using DonPavlik.Domain.Interfaces;
@@ -35,8 +31,8 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// <summary>
 		/// Initializes a new instance of <see cref="ContactsModuleViewModel"/> class.
 		/// </summary>
-		/// <param name="events">
-		/// Event aggregator for dealing with external events.
+		/// <param name="viewFactory">
+		/// View factory used to get views.
 		/// </param>
 		[ImportingConstructor]
 		public ContactsModuleViewModel(IViewFactory viewFactory)
@@ -44,9 +40,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			Contract.Requires(viewFactory != null, "View Factory can not be null.");
 			this._ViewFactory = viewFactory;
 
-			this.SetupAddCommand();
-			this.SetupEditCommand();
-			this.SetupNavigationCommand();
+			this.InitializeCommands();
 		}
 		
 		#region Public Properties
@@ -105,6 +99,13 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 		#region Private Methods
 
+		private void InitializeCommands()
+		{
+			this.SetupAddCommand();
+			this.SetupEditCommand();
+			this.SetupNavigationCommand();
+		}
+
 		private void SetupAddCommand()
 		{
 			var canAddPerson = this.WhenAny(x => x.ActiveItem, x => x.ActiveItem,
@@ -115,7 +116,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 				.Subscribe((arg) =>
 				{
 					IGroupViewModel groupView = this._ViewFactory.GetGroupView();
-					if (string.Equals(groupView.ActiveModuleName, ViewNames.PEOPLE))
+					if (string.Equals(groupView.ActiveItem.GetType().Name, "PeopleViewModel"))
 					{
 						IAddPersonViewModel addPersonView = this._ViewFactory.GetAddPersonView();
 
@@ -129,7 +130,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 						this.ActiveItem = addPersonView;
 					}
-					else if (string.Equals(groupView.ActiveModuleName, ViewNames.ORGANIZATION))
+					else if (string.Equals(groupView.ActiveItem.GetType().Name, "OrganizationsViewModel"))
 					{
 						IAddOrganizationViewModel addOrganization = this._ViewFactory.GetAddOrganizationView();
 
@@ -171,7 +172,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 				.Subscribe((arg) =>
 				{
 					IGroupViewModel groupView = this._ViewFactory.GetGroupView();
-					if (string.Equals(groupView.ActiveModuleName, ViewNames.PEOPLE))
+					if (string.Equals(groupView.ActiveItem.GetType().Name, "PeopleViewModel"))
 					{
 						IAddPersonViewModel addPersonView = this._ViewFactory.GetEditPersonView();
 
@@ -188,7 +189,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 						this.ActiveItem = addPersonView;
 					}
-					else if (string.Equals(groupView.ActiveModuleName, ViewNames.ORGANIZATION))
+					else if (string.Equals(groupView.ActiveItem.GetType().Name, "OrganizationsViewModel"))
 					{
 						IAddOrganizationViewModel addOrganization = this._ViewFactory.GetEditOrganizationView();
 

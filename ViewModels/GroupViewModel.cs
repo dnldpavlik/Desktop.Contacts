@@ -4,6 +4,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel.Composition;
+	using System.Diagnostics.Contracts;
 	using Caliburn.Micro;
 	using DonPavlik.Desktop.Contacts.Events;
 	using DonPavlik.Desktop.Contacts.Interfaces;
@@ -20,58 +21,54 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	{
 		#region Private Constants and Fields
 
-		private readonly Dictionary<string, object> _cachedViews =
-			new Dictionary<string, object>();
-
-#pragma warning disable 0649
-		/// <summary>
-		/// Local backing field for the active module name, this is set 
-		/// via the ReactiveUI frame work, so this warning is not accurate.
-		/// </summary>
-		private string _ActiveModuleName;
-#pragma warning restore 0649
-
 		private object _ActiveItem;
 
-		private ReactiveAsyncCommand ShowCommand; 
+		private readonly IViewFactory _ViewFactory;
 
 		#endregion
 
 		/// <summary>
 		/// Creates a new instance of <see cref="GroupViewModel"/> class.
 		/// </summary>
-		/// <param name="events">
-		/// Event aggregator for dealing with events
+		/// <param name="viewFactory">
+		/// View factory
 		/// </param>
 		[ImportingConstructor]
-		public GroupViewModel(IEventAggregator events)
+		public GroupViewModel(IViewFactory viewFactory)
 		{
-			events.Subscribe(this);
+			Contract.Requires(viewFactory != null, "View Factory can not be null.");
+			this._ViewFactory = viewFactory;
 
-			this.ShowCommand = new ReactiveAsyncCommand();
-			this.ShowCommand
-				.RegisterAsyncAction(this.LoadViewModel);
+			this.ShowPeople = new ReactiveCommand();
+			this.ShowPeople
+				.Subscribe((arg) =>
+					{
+						this.Processing = true;
+						this.RaisePropertyChanged(t => t.Processing);
 
-			this.ShowPeople();
+						IPeopleViewModel peopleViewModel = this._ViewFactory.GetPeopleView();
+
+						this.ActiveItem = peopleViewModel;
+
+						this.Processing = false;
+						this.RaisePropertyChanged(t => t.Processing);
+					});
+
+			this.ShowOrganizations = new ReactiveCommand();
+			this.ShowOrganizations
+				.Subscribe((arg) =>
+					{
+						this.Processing = true;
+						this.RaisePropertyChanged(t => t.Processing);
+
+						this.ActiveItem = this._ViewFactory.GetOrganizationView();
+
+						this.Processing = false;
+						this.RaisePropertyChanged(t => t.Processing);
+					});
 		}
 
 		#region Public Properties
-
-		/// <summary>
-		/// Gets the active module name (Should be view)
-		/// </summary>
-		public string ActiveModuleName
-		{
-			get
-			{
-				return this._ActiveModuleName;
-			}
-
-			protected set
-			{
-				this.RaiseAndSetIfChanged(t => t.ActiveModuleName, value);
-			}
-		}
 
 		/// <summary>
 		/// Gets or sets the processing flag that indecates whether the 
@@ -86,6 +83,11 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		{
 			get
 			{
+				if (this._ActiveItem == null)
+				{
+					this._ActiveItem = this._ViewFactory.GetPeopleView();
+				}
+
 				return this._ActiveItem;
 			}
 
@@ -99,77 +101,46 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// <summary>
 		/// Gets or sets the selected contact item
 		/// </summary>
-		public IObservable<object> SelectedContactItem { get; set; }
+		public object SelectedContactItem { get; protected set; }
+
+		/// <summary>
+		/// Gets the Show People Command
+		/// </summary>
+		public ReactiveCommand ShowPeople
+		{
+			get;
+			protected set;
+		}
+
+		/// <summary>
+		/// Gets the Show Organizations Command
+		/// </summary>
+		public ReactiveCommand ShowOrganizations
+		{
+			get;
+			protected set;
+		}
 
 		#endregion
-		
-		#region Public Methods
-
-		/// <summary>
-		/// Action that shows the people view, Delegate for Caliburn.Micro's 
-		/// auto binding.
-		/// </summary>
-		public void ShowPeople()
-		{
-			this.ShowCommand.Execute(ViewNames.PEOPLE);
-		}
-
-		/// <summary>
-		/// Action that shows the Organizations view, Delegate for Caliburn.Micro's 
-		/// auto binding.
-		/// </summary>
-		public void ShowOrganizations()
-		{
-			this.ShowCommand.Execute(ViewNames.ORGANIZATION);
-		}
 
 		/// <summary>
 		/// Handles the save event. 
 		/// </summary>
-		/// <param name="saveEvent">
+		/// <param name="saveType">
 		/// Save event
 		/// </param>
 		public void HandleSave(string saveType)
 		{
-			this._cachedViews.Remove(saveType);
-			this.LoadViewModelFromActiveModuleName();
-		}
+			this._ViewFactory.ClearView(saveType);
 
-		#endregion
-
-		private void LoadViewModel(object obj)
-		{
-			this.ActiveModuleName = obj.ToString();
-			this.LoadViewModelFromActiveModuleName();
-		}
-
-		private void LoadViewModelFromActiveModuleName()
-		{
-			this.Processing = true;
-			this.RaisePropertyChanged(t => t.Processing);
-			switch (this.ActiveModuleName)
+			if (saveType == ViewNames.PEOPLE)
 			{
-				case ViewNames.PEOPLE:
-					if (!this._cachedViews.ContainsKey(ViewNames.PEOPLE))
-					{
-						this._cachedViews.Add(
-							ViewNames.PEOPLE,
-							IoC.Get<IPeopleViewModel>());
-					}
-					break;
-				default:
-					if (!this._cachedViews.ContainsKey(ViewNames.ORGANIZATION))
-					{
-						this._cachedViews.Add(
-							ViewNames.ORGANIZATION, 
-							IoC.Get<IOrganizationsViewModel>());
-					}
-					break;
+				this.ShowPeople.Execute(null);
 			}
-
-			this.ActiveItem = this._cachedViews[this.ActiveModuleName];
-			this.Processing = false;
-			this.RaisePropertyChanged(t => t.Processing);
+			else
+			{
+				this.ShowOrganizations.Execute(null);
+			}
 		}
 	}
 }

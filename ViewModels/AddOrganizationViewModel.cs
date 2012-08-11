@@ -20,10 +20,6 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		ReactiveObject,
 		IAddOrganizationViewModel
 	{
-		private const string ADD_ORGANIZATION = "Add Organization";
-
-		private const string EDIT_ORGANIZATION = "Edit Organization";
-
 		private IRepository<IOrganization> _organizationRepo;
 
 		/// <summary>
@@ -36,7 +32,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			this._organizationRepo = organizationRepo;
 
 			this.OrganizationPreview = new OrganizationViewModel(new Organization());
-			this.Caption = ADD_ORGANIZATION;
+			this.Caption = ViewNames.ADD_ORGANIZATION;
 
 			this.SetupSaveCommand();
 		}
@@ -92,7 +88,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		{
 			this.OrganizationPreview = new OrganizationViewModel(organization);
 			this.OrganizationName = OrganizationPreview.OrgName;
-			this.Caption = EDIT_ORGANIZATION;
+			this.Caption = ViewNames.EDIT_ORGANIZATION;
 		}
 
 		/// <summary>
@@ -100,7 +96,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// </summary>
 		private void Save()
 		{
-			if (string.Equals(EDIT_ORGANIZATION, this.Caption))
+			if (string.Equals(ViewNames.EDIT_ORGANIZATION, this.Caption))
 			{
 				this._organizationRepo.Update(this.OrganizationPreview.Organization);
 			}
