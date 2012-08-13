@@ -34,8 +34,6 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		public PeopleViewModel(IEventAggregator eventAggregator)
 		{
 			this._eventAggregator = eventAggregator;
-
-
 		}
 
 		/// <summary>
@@ -77,9 +75,10 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// </summary>
 		public async void OnImportsSatisfied()
 		{
+			string path = this.ContactRepository.Path;
 			ICollection<IContact> contacts = await this.GetPeople();
-			this.People = 
-				contacts.CreateDerivedCollection(x => new ContactViewModel(x));
+			this.People =
+				contacts.CreateDerivedCollection(x => new ContactViewModel(x, path));
 
 			this.RaisePropertyChanged(x => x.People);
 		}

@@ -2,6 +2,7 @@
 namespace DonPavlik.Desktop.Contacts.ViewModels
 {
 	using System;
+	using System.IO;
 	using System.Threading.Tasks;
 	using System.Windows.Media.Imaging;
 	using DonPavlik.Domain.Interfaces.Roles;
@@ -16,13 +17,16 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 		private BitmapImage _image = null;
 
+		private readonly string _Path = string.Empty;
+
 		/// <summary>
 		/// Initializes a new instance of <see cref="ContactViewModel"/> class
 		/// </summary>
 		/// <param name="contact">Contact to be modeled</param>
-		public ContactViewModel(IContact contact)
+		public ContactViewModel(IContact contact, string path)
 		{
 			this._contact = contact;
+			this._Path = path;
 		}
 
 		/// <summary>
@@ -53,12 +57,16 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 				{
 					System.Windows.Application.Current.Dispatcher.InvokeAsync( 
 						async () => 
-						{ 
-							this.ImageUrl = await GetImageAsBitmap(
+						{
+							string path = Path.Combine(
+								this._Path,
 								this._contact.Image
-									.Replace("file:", string.Empty)
-									.Replace("{{", string.Empty)
-									.Replace("}}", string.Empty)); 
+									.Replace("local:", string.Empty)
+									.Replace("[[", string.Empty)
+									.Replace("]]", string.Empty));
+
+
+							this.ImageUrl = await GetImageAsBitmap(path); 
 						});
 				}
 

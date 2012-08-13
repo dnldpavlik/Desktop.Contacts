@@ -46,7 +46,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			this._contactRepo = contactRepo;
 
 			Contact contact = new Contact(new Person());
-			this.PersonPreview = new ContactViewModel(contact);
+			this.PersonPreview = new ContactViewModel(contact, this._contactRepo.Path);
 			this.Caption = ViewNames.ADD_PERSON;
 
 			this.SetupSaveCommand();
@@ -220,7 +220,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// be edited</param>
 		public void EditExistingContact(IContact selectedContact)
 		{
-			this.PersonPreview = new ContactViewModel(selectedContact);
+			this.PersonPreview = new ContactViewModel(selectedContact, this._contactRepo.Path);
 			this._FullName = selectedContact.PrimaryName.FullName;
 			this.Caption = ViewNames.EDIT_PERSON;
 		}
