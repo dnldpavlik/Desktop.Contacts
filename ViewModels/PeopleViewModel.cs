@@ -4,6 +4,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel.Composition;
+	using System.Reactive.Subjects;
 	using System.Threading.Tasks;
 	using Caliburn.Micro;
 	using DonPavlik.Desktop.Contacts.Events;
@@ -55,11 +56,11 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			set
 			{
 				this._selectedPerson = value;
-				this._eventAggregator.Publish(
-					new SelectedPersonEvent() 
-					{ 
-						SelectedContacts = value.Contact 
-					});
+				//this._eventAggregator.Publish(
+				//	new SelectedPersonEvent() 
+				//	{ 
+				//		SelectedContacts = value.Contact 
+				//	});
 			}
 		}
 

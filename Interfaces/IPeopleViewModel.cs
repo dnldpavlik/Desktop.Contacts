@@ -2,6 +2,7 @@
 namespace DonPavlik.Desktop.Contacts.Interfaces
 {
 	using System;
+	using System.Reactive.Subjects;
 	using DonPavlik.Desktop.Contacts.ViewModels;
 
 	/// <summary>

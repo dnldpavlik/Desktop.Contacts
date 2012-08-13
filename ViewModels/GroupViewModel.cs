@@ -5,6 +5,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	using System.Collections.Generic;
 	using System.ComponentModel.Composition;
 	using System.Diagnostics.Contracts;
+	using System.Reactive.Subjects;
 	using Caliburn.Micro;
 	using DonPavlik.Desktop.Contacts.Events;
 	using DonPavlik.Desktop.Contacts.Interfaces;
@@ -47,6 +48,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 						this.RaisePropertyChanged(t => t.Processing);
 
 						IPeopleViewModel peopleViewModel = this._ViewFactory.GetPeopleView();
+						
+						//peopleViewModel.SelectedPerson
+						//	.ToProperty(this, x => x.SelectedContactItem);
 
 						this.ActiveItem = peopleViewModel;
 
