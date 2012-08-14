@@ -5,7 +5,6 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	using System.Linq;
 	using System.ComponentModel.Composition;
 	using Caliburn.Micro;
-	using DonPavlik.Desktop.Contacts.Events;
 	using DonPavlik.Desktop.Contacts.Interfaces;
 	using DonPavlik.Domain.Interfaces.Roles;
 	using DonPavlik.Domain.Model;

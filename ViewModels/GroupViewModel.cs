@@ -131,7 +131,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// <param name="contact">Contact that is be destroyed</param>
 		public void RemoveExistingContact(ContactViewModel contact)
 		{
-			this.PeopleViewModel.RemoveExistingContact(contact);
+			this.PeopleViewModel.Remove.Execute(contact);
 		}
 
 		/// <summary>
@@ -175,6 +175,12 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 						this.ObservableForProperty(x => x.PeopleViewModel.SelectedItem)
 							.Subscribe(x => this.SelectedContactItem = x.Value);
+
+						this.PeopleViewModel.Remove
+							.Subscribe(_ =>
+								{
+									this.HandleSave(ViewNames.PEOPLE);
+								});
 					}
 					this.ActiveItem = this.PeopleViewModel;
 

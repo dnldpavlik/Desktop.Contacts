@@ -4,6 +4,7 @@ namespace DonPavlik.Desktop.Contacts.Interfaces
 	using System;
 	using System.Reactive.Subjects;
 	using DonPavlik.Desktop.Contacts.ViewModels;
+	using ReactiveUI.Xaml;
 
 	/// <summary>
 	/// People view model definition
@@ -16,9 +17,8 @@ namespace DonPavlik.Desktop.Contacts.Interfaces
 		ContactViewModel SelectedItem { get; }
 
 		/// <summary>
-		/// Removes existing contact
+		/// Gets the remove command
 		/// </summary>
-		/// <param name="contact">Contact that is be destroyed</param>
-		void RemoveExistingContact(ContactViewModel contact);
+		ReactiveCommand Remove { get; }
 	}
 }

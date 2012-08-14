@@ -7,11 +7,11 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	using System.Reactive.Subjects;
 	using System.Threading.Tasks;
 	using Caliburn.Micro;
-	using DonPavlik.Desktop.Contacts.Events;
 	using DonPavlik.Desktop.Contacts.Interfaces;
 	using DonPavlik.Domain.Interfaces.Roles;
 	using DonPavlik.WikiRepository.Interfaces;
 	using ReactiveUI;
+using ReactiveUI.Xaml;
 
 	/// <summary>
 	/// 
@@ -23,6 +23,15 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		IPeopleViewModel
 	{
 		private ContactViewModel _SelectedItem;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PeopleViewModel"/> class.
+		/// </summary>
+		[ImportingConstructor]
+		public PeopleViewModel()
+		{
+			this.SetupRemoveCommand();
+		}
 
 		/// <summary>
 		/// Gets the Contact Repository
@@ -53,6 +62,11 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		public ReactiveCollection<ContactViewModel> People { get; private set; }
 
 		/// <summary>
+		/// Gets the remove command
+		/// </summary>
+		public ReactiveCommand Remove { get; protected set; }
+
+		/// <summary>
 		/// Executed when the all imports have been satisfied by MEF.  
 		/// 
 		/// Gets the collection of contacts from the contact repository.
@@ -67,13 +81,21 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			this.RaisePropertyChanged(x => x.People);
 		}
 
-		/// <summary>
-		/// Removes existing contact
-		/// </summary>
-		/// <param name="contact">Contact that is be destroyed</param>
-		public void RemoveExistingContact(ContactViewModel contact)
+		private void SetupRemoveCommand()
 		{
-			//this.ContactRepository.
+			var canRemove = this.WhenAny(x => x.SelectedItem, (b) => b.Value != null);
+
+			this.Remove = new ReactiveCommand(canRemove);
+			this.Remove
+				.Subscribe((arg) =>
+					{
+						ContactViewModel contactVM = arg as ContactViewModel;
+
+						if (contactVM != null)
+						{
+							this.ContactRepository.Delete(contactVM.Contact);
+						}
+					});
 		}
 
 		private async Task<ICollection<IContact>> GetPeople()

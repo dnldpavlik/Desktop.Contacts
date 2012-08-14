@@ -94,13 +94,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Events\SelectedPersonEvent.cs" />
     <Compile Include="Interfaces\IAddOrganizationViewModel.cs" />
     <Compile Include="Interfaces\IAddPersonViewModel.cs" />
     <Compile Include="Interfaces\IGroupViewModel.cs" />
     <Compile Include="Interfaces\IOrganizationsViewModel.cs" />
     <Compile Include="Interfaces\IPeopleViewModel.cs" />
-    <Compile Include="Interfaces\ISelectableItem.cs" />
     <Compile Include="Interfaces\IViewFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewFactory.cs" />
