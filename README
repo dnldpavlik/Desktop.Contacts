@@ -1,8 +1,8 @@
-= Desktop Contacts Module =
+= Desktop Contacts Module
 
 A Module that uses both Caliburn.Micro and ReactiveUX for building a conventions based and reactive/responsive client module.  
 
-== Technologies used ==
+== Technologies used
  * Caliburn.Micro
    - IoC with MEF
    - Convention of loading of Views for defined View Models
