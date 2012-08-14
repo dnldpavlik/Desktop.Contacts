@@ -21,7 +21,7 @@
 			BorderThickness="0"
 			Background="Transparent"
 			x:Name="People"
-			SelectedItem="{Binding SelectedPerson}">
+			SelectedItem="{Binding SelectedItem}">
 			<ListBox.ItemsPanel>
 				<ItemsPanelTemplate>
 					<WrapPanel

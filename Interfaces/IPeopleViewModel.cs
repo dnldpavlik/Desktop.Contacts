@@ -11,8 +11,14 @@ namespace DonPavlik.Desktop.Contacts.Interfaces
 	public interface IPeopleViewModel
 	{
 		/// <summary>
-		/// Gets or sets teh Selected Person
+		/// Gets the Selected item
 		/// </summary>
-		ContactViewModel SelectedPerson { get; set; }
+		ContactViewModel SelectedItem { get; }
+
+		/// <summary>
+		/// Removes existing contact
+		/// </summary>
+		/// <param name="contact">Contact that is be destroyed</param>
+		void RemoveExistingContact(ContactViewModel contact);
 	}
 }

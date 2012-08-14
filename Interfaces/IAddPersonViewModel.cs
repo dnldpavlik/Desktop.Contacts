@@ -2,6 +2,7 @@
 namespace DonPavlik.Desktop.Contacts.Interfaces
 {
 	using System.ComponentModel;
+	using DonPavlik.Desktop.Contacts.ViewModels;
 	using DonPavlik.Domain.Interfaces.Roles;
 	using ReactiveUI;
 	using ReactiveUI.Xaml;
@@ -17,7 +18,7 @@ namespace DonPavlik.Desktop.Contacts.Interfaces
 		/// </summary>
 		/// <param name="selectedContact">The selected contact to 
 		/// be edited</param>
-		void EditExistingContact(IContact selectedContact);
+		void EditExistingContact(ContactViewModel selectedContact);
 
 		/// <summary>
 		/// Gets or sets the Save Command

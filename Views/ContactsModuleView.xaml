@@ -85,14 +85,13 @@
 			Grid.ColumnSpan="2"
 			Orientation="Horizontal"
 			Grid.Row="2"
-			Margin="60,0,0,0">
-			
+			Margin="30,0,0,0">
+
 			<Button
 				VerticalAlignment="Top"
-				Width="29"
+				Width="48"
 				Height="48"
-				Grid.RowSpan="2"
-				Margin="8,4"
+				Margin="4"
 				x:Name="AddUser"
 				Command="{Binding Add}">
 				<Button.Style>
@@ -115,32 +114,34 @@
 				</Button.Style>
 
 				<Border
+					Margin="4"
 					Background="Transparent">
-					<StackPanel
-						Orientation="Vertical">
+					<Border
+						CornerRadius="18"
+						BorderThickness="2"
+						BorderBrush="{Binding ElementName=AddUser, Path=Foreground}"
+						Width="30"
+						Height="30"
+						Margin="0">
 						<Viewbox
+							Width="12"
+							Height="12"
 							xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 							<Path
-								Data="M 35.7547,18.2107C 35.7547,27.9 27.9,35.7547 18.2106,35.7547C 8.5213,35.7547 0.666656,27.9 0.666656,18.2107C 0.666656,8.52133 8.5213,0.666672 18.2106,0.666672C 27.9,0.666672 35.7547,8.52133 35.7547,18.2107 Z M 18.211,28.2107L 18.211,8.21074M 8.211,18.2107L 28.211,18.2107"
+								Data="F1M-1779.91,-6051.87L-1794.67,-6051.87 -1794.67,-6067.53C-1794.67,-6071.9 -1798.22,-6075.45 -1802.58,-6075.45 -1806.94,-6075.45 -1810.49,-6071.9 -1810.49,-6067.53L-1810.49,-6051.87 -1826.76,-6051.87C-1831.13,-6051.87 -1834.67,-6048.32 -1834.67,-6043.96 -1834.67,-6039.6 -1831.13,-6036.05 -1826.76,-6036.05L-1810.49,-6036.05 -1810.49,-6020.69C-1810.49,-6016.32 -1806.94,-6012.78 -1802.58,-6012.78 -1798.22,-6012.78 -1794.67,-6016.32 -1794.67,-6020.69L-1794.67,-6036.05 -1779.91,-6036.05C-1775.55,-6036.05 -1772.01,-6039.6 -1772.01,-6043.96 -1772.01,-6048.32 -1775.55,-6051.87 -1779.91,-6051.87"
 								Stretch="Uniform"
-								Stroke="{Binding ElementName=AddUser, Path=Foreground}"
-								Width="29"
-								Height="29"
-								Margin="4" />
+								Fill="{Binding ElementName=AddUser, Path=Foreground}" />
 						</Viewbox>
-						<TextBlock
-							HorizontalAlignment="Center"
-							Text="Add" />
-					</StackPanel>
+					</Border>
 				</Border>
 			</Button>
-			
+
 			<Button
 				VerticalAlignment="Top"
-				Width="32"
+				Width="48"
 				Height="48"
 				Grid.RowSpan="2"
-				Margin="8,4"
+				Margin="4"
 				x:Name="EditUser"
 				Command="{Binding Edit}">
 				<Button.Style>
@@ -165,15 +166,13 @@
 				<Border
 					Margin="4"
 					Background="Transparent">
-					<StackPanel
-						Orientation="Vertical">
 						<Border
 							CornerRadius="18"
-							BorderThickness="1"
+							BorderThickness="2"
 							BorderBrush="{Binding ElementName=EditUser, Path=Foreground}"
-							Width="24"
-							Height="24"
-							Margin="0,0,0,2">
+							Width="30"
+							Height="30"
+							Margin="0">
 							<Viewbox
 								Width="12"
 								Height="12"
@@ -184,11 +183,56 @@
 									Fill="{Binding ElementName=EditUser, Path=Foreground}" />
 							</Viewbox>
 						</Border>
+				</Border>
+			</Button>
+			
+			<Button
+				VerticalAlignment="Top"
+				Width="48"
+				Height="48"
+				Grid.RowSpan="2"
+				Margin="4"
+				x:Name="DeleteUser"
+				Command="{Binding Delete}">
+				<Button.Style>
+					<Style
+						BasedOn="{StaticResource ClearButtonOnWhite}"
+						TargetType="Button">
+						<Setter
+							Property="Visibility"
+							Value="Collapsed" />
+						<Style.Triggers>
+							<Trigger
+								Property="IsEnabled"
+								Value="True">
+								<Setter
+									Property="Visibility"
+									Value="Visible" />
+							</Trigger>
+						</Style.Triggers>
+					</Style>
+				</Button.Style>
 
-						<TextBlock
-							HorizontalAlignment="Center"
-							Text="Edit" />
-					</StackPanel>
+				<Border
+					Margin="4"
+					Background="Transparent">
+					<Border
+						CornerRadius="18"
+						BorderThickness="2"
+						BorderBrush="{Binding ElementName=DeleteUser, Path=Foreground}"
+						Width="30"
+						Height="30"
+						Margin="0">
+						<Viewbox
+							Width="12"
+							Height="12"
+							xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+							<Path
+								Data="M50.102882,29.407755C49.257885,29.432858,48.560093,30.055112,48.503914,30.870937L45.284248,76.525818C45.214309,77.385777 45.914169,78.146111 46.824081,78.215942 47.744003,78.276009 48.533813,77.626038 48.593864,76.755825L51.823417,31.100942C51.883468,30.23073 51.183487,29.480648 50.273697,29.410816 50.216202,29.407062 50.159214,29.406082 50.102882,29.407755z M15.04918,29.407755C14.992853,29.406082 14.935873,29.407062 14.878385,29.410816 13.958463,29.480648 13.268614,30.23073 13.328542,31.100942L16.548085,76.755825C16.608135,77.626038 17.408077,78.276009 18.317869,78.215942 19.237789,78.146111 19.927639,77.385777 19.86771,76.525818L16.648169,30.870937C16.591871,30.055112,15.894075,29.432858,15.04918,29.407755z M32.036012,29.350752C31.116213,29.350751,30.376322,30.06079,30.376322,30.931002L30.376322,76.695759C30.376322,77.565971 31.116213,78.276009 32.036012,78.276009 32.955934,78.276009 33.695825,77.565971 33.695825,76.695759L33.695825,30.931002C33.695825,30.06079,32.955934,29.350751,32.036012,29.350752z M1.8300743,25.860136L62.242073,25.860136 57.912571,75.025654C57.912571,78.756042,54.932987,81.766136,51.253547,81.766136L13.148636,81.766136C9.4690711,81.766136,6.4894874,78.756042,6.4894874,75.025654z M20.479999,3.829464C19.26,3.829464 18.27,4.8193264 18.27,6.039156 18.27,7.2589855 19.26,8.248848 20.479999,8.248848L43.599998,8.248848C44.819999,8.248848 45.810001,7.2589855 45.810001,6.039156 45.810001,4.8193264 44.819999,3.829464 43.599998,3.829464z M19.99,0L44.010002,0C47.580002,0,50.510002,2.6196327,51.049999,6.039156L54.880001,6.039156C59.920002,6.039156,64,10.298561,64,15.557827L64,19.457283C64,20.057199,63.950001,20.637118,63.849998,21.207038L0.16000044,21.207038C0.060000062,20.637118,1.1920929E-07,20.057199,0,19.457283L0,15.557827C1.1920929E-07,10.298561,4.0900002,6.039156,9.1200001,6.039156L12.96,6.039156C13.5,2.6196327,16.43,0,19.99,0z"
+								Stretch="Uniform"
+								Fill="{Binding ElementName=DeleteUser, Path=Foreground}" />
+						</Viewbox>
+					</Border>
 				</Border>
 			</Button>
 		</StackPanel>

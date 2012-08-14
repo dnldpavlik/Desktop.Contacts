@@ -22,20 +22,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		IPartImportsSatisfiedNotification, 
 		IPeopleViewModel
 	{
-		private ContactViewModel _selectedPerson;
-
-		private IEventAggregator _eventAggregator;
-
-		/// <summary>
-		/// Creates an instance of the <see cref="PeopleViewModel"/> class.
-		/// </summary>
-		/// <param name="eventAggregator">Event Aggregator for dealing with 
-		/// events.</param>
-		[ImportingConstructor]
-		public PeopleViewModel(IEventAggregator eventAggregator)
-		{
-			this._eventAggregator = eventAggregator;
-		}
+		private ContactViewModel _SelectedItem;
 
 		/// <summary>
 		/// Gets the Contact Repository
@@ -44,23 +31,19 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		public IRepository<IContact> ContactRepository { get; private set; }
 
 		/// <summary>
-		/// Gets or sets teh Selected Person
+		/// Gets the Selected item
 		/// </summary>
-		public ContactViewModel SelectedPerson
+		public ContactViewModel SelectedItem
 		{
 			get
 			{
-				return this._selectedPerson;
+				return this._SelectedItem;
 			}
 
-			set
+			protected set
 			{
-				this._selectedPerson = value;
-				//this._eventAggregator.Publish(
-				//	new SelectedPersonEvent() 
-				//	{ 
-				//		SelectedContacts = value.Contact 
-				//	});
+				this._SelectedItem = value;
+				this.RaisePropertyChanged(x => x.SelectedItem);
 			}
 		}
 
@@ -82,6 +65,15 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 				contacts.CreateDerivedCollection(x => new ContactViewModel(x, path));
 
 			this.RaisePropertyChanged(x => x.People);
+		}
+
+		/// <summary>
+		/// Removes existing contact
+		/// </summary>
+		/// <param name="contact">Contact that is be destroyed</param>
+		public void RemoveExistingContact(ContactViewModel contact)
+		{
+			//this.ContactRepository.
 		}
 
 		private async Task<ICollection<IContact>> GetPeople()

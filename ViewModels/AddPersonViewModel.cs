@@ -218,10 +218,10 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		/// </summary>
 		/// <param name="selectedContact">The selected contact to 
 		/// be edited</param>
-		public void EditExistingContact(IContact selectedContact)
+		public void EditExistingContact(ContactViewModel selectedContact)
 		{
-			this.PersonPreview = new ContactViewModel(selectedContact, this._contactRepo.Path);
-			this._FullName = selectedContact.PrimaryName.FullName;
+			this.PersonPreview = selectedContact;
+			this._FullName = this.PersonPreview.FullName;
 			this.Caption = ViewNames.EDIT_PERSON;
 		}
 

@@ -7,7 +7,6 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	using DonPavlik.Desktop.Contacts.Interfaces;
 	using DonPavlik.Desktop.Infrastructure.Interfaces;
 	using DonPavlik.Domain.Interfaces;
-	using DonPavlik.Domain.Interfaces.Roles;
 	using ReactiveUI;
 	using ReactiveUI.Xaml;
 
@@ -75,6 +74,15 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		}
 
 		/// <summary>
+		/// Gets the delete command
+		/// </summary>
+		public ReactiveCommand Delete
+		{
+			get;
+			protected set;
+		}
+
+		/// <summary>
 		/// Gets the active item, which is the active view
 		/// </summary>
 		public object ActiveItem
@@ -83,7 +91,8 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			{
 				if (this._ActiveItem == null)
 				{
-					this._ActiveItem = this._ViewFactory.GetGroupView();
+					this.GroupViewModel = this._ViewFactory.GetGroupView();
+					this._ActiveItem = this.GroupViewModel;
 				}
 
 				return this._ActiveItem;
@@ -95,6 +104,11 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets the Group view Model
+		/// </summary>
+		public IGroupViewModel GroupViewModel { get; protected set; }
+
 		#endregion
 
 		#region Private Methods
@@ -103,6 +117,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 		{
 			this.SetupAddCommand();
 			this.SetupEditCommand();
+			this.SetupDeleteCommand();
 			this.SetupNavigationCommand();
 		}
 
@@ -115,8 +130,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 			this.Add
 				.Subscribe((arg) =>
 				{
-					IGroupViewModel groupView = this._ViewFactory.GetGroupView();
-					if (string.Equals(groupView.ActiveItem.GetType().Name, "PeopleViewModel"))
+					if (string.Equals(GroupViewModel.ActiveItem.GetType().Name, "PeopleViewModel"))
 					{
 						IAddPersonViewModel addPersonView = this._ViewFactory.GetAddPersonView();
 
@@ -124,13 +138,13 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 							.Subscribe((obj) =>
 							{
 								this._ViewFactory.ClearView(ViewNames.ADD_PERSON);
-								groupView.HandleSave(ViewNames.PEOPLE);
+								GroupViewModel.HandleSave(ViewNames.PEOPLE);
 								this.NavigateBack.Execute(null);
 							});
 
 						this.ActiveItem = addPersonView;
 					}
-					else if (string.Equals(groupView.ActiveItem.GetType().Name, "OrganizationsViewModel"))
+					else if (string.Equals(GroupViewModel.ActiveItem.GetType().Name, "OrganizationsViewModel"))
 					{
 						IAddOrganizationViewModel addOrganization = this._ViewFactory.GetAddOrganizationView();
 
@@ -138,7 +152,7 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 							.Subscribe((obj) =>
 							{
 								this._ViewFactory.ClearView(ViewNames.ADD_ORGANIZATION);
-								groupView.HandleSave(ViewNames.ORGANIZATION);
+								GroupViewModel.HandleSave(ViewNames.ORGANIZATION);
 								this.NavigateBack.Execute(null);
 							});
 
@@ -149,58 +163,44 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 
 		private void SetupEditCommand()
 		{
-			var canEditPerson = this.WhenAny(x => x.ActiveItem,
-				(b) => 
-					{
-						IGroupViewModel groupViewModel = b.Value as IGroupViewModel;
-
-						if (groupViewModel == null)
-						{
-							return false;
-						}
-
-						if (groupViewModel.SelectedContactItem != null)
-						{
-							return true;
-						}
-
-						return false;
-					});
+			var canEditPerson = this.WhenAny(x => x.GroupViewModel.SelectedContactItem, x => x.GroupViewModel.ActiveItem,
+				(b, u) => b.Value != null && 
+					(b.Value is ContactViewModel && u.Value is PeopleViewModel) ||
+					(b.Value is OrganizationViewModel && u.Value is OrganizationsViewModel));
 
 			this.Edit = new ReactiveCommand(canEditPerson);
 			this.Edit
 				.Subscribe((arg) =>
 				{
-					IGroupViewModel groupView = this._ViewFactory.GetGroupView();
-					if (string.Equals(groupView.ActiveItem.GetType().Name, "PeopleViewModel"))
+					if (string.Equals(GroupViewModel.ActiveItem.GetType().Name, "PeopleViewModel"))
 					{
 						IAddPersonViewModel addPersonView = this._ViewFactory.GetEditPersonView();
 
-						addPersonView.EditExistingContact(
-							groupView.SelectedContactItem as IContact);
+						ContactViewModel contactVM = GroupViewModel.SelectedContactItem as ContactViewModel;
+						addPersonView.EditExistingContact(contactVM);
 
 						addPersonView.SaveCommand
 							.Subscribe((obj) =>
 							{
 								this._ViewFactory.ClearView(ViewNames.EDIT_PERSON);
-								groupView.HandleSave(ViewNames.PEOPLE);
+								GroupViewModel.HandleSave(ViewNames.PEOPLE);
 								this.NavigateBack.Execute(null);
 							});
 
 						this.ActiveItem = addPersonView;
 					}
-					else if (string.Equals(groupView.ActiveItem.GetType().Name, "OrganizationsViewModel"))
+					else if (string.Equals(GroupViewModel.ActiveItem.GetType().Name, "OrganizationsViewModel"))
 					{
 						IAddOrganizationViewModel addOrganization = this._ViewFactory.GetEditOrganizationView();
 
 						addOrganization.EditExistingOrganization(
-							groupView.SelectedContactItem as IOrganization);
+							GroupViewModel.SelectedContactItem as IOrganization);
 
 						addOrganization.SaveCommand
 							.Subscribe((obj) =>
 							{
 								this._ViewFactory.ClearView(ViewNames.EDIT_ORGANIZATION);
-								groupView.HandleSave(ViewNames.ORGANIZATION);
+								GroupViewModel.HandleSave(ViewNames.ORGANIZATION);
 								this.NavigateBack.Execute(null);
 							});
 
@@ -220,6 +220,30 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 				{
 					this.ActiveItem = this._ViewFactory.GetGroupView();
 				});
+		}
+
+		private void SetupDeleteCommand()
+		{
+			var canDeletePerson = this.WhenAny(x => x.GroupViewModel.SelectedContactItem, x => x.GroupViewModel.ActiveItem,
+				(b, u) => b.Value != null &&
+					(b.Value is ContactViewModel && u.Value is PeopleViewModel) ||
+					(b.Value is OrganizationViewModel && u.Value is OrganizationsViewModel));
+
+			this.Delete = new ReactiveCommand(canDeletePerson);
+			this.Delete
+				.Subscribe((arg) =>
+					{
+						if (string.Equals(GroupViewModel.ActiveItem.GetType().Name, "PeopleViewModel"))
+						{
+							ContactViewModel contactVM = GroupViewModel.SelectedContactItem as ContactViewModel;
+							GroupViewModel.RemoveExistingContact(contactVM);
+						}
+						else if (string.Equals(GroupViewModel.ActiveItem.GetType().Name, "OrganizationsViewModel"))
+						{
+							GroupViewModel.RemoveExistingOrganization(
+								GroupViewModel.SelectedContactItem as OrganizationViewModel);
+						}
+					});
 		}
 
 		#endregion

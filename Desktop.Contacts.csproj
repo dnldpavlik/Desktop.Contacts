@@ -83,7 +83,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Reactive">
-      <HintPath>..\..\..\Resources\Development\Frameworks\ReactiveUI\System.Reactive.dll</HintPath>
+      <HintPath>..\..\packages\Rx_Experimental-Main.1.1.11111\lib\Net45\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -100,6 +100,7 @@
     <Compile Include="Interfaces\IGroupViewModel.cs" />
     <Compile Include="Interfaces\IOrganizationsViewModel.cs" />
     <Compile Include="Interfaces\IPeopleViewModel.cs" />
+    <Compile Include="Interfaces\ISelectableItem.cs" />
     <Compile Include="Interfaces\IViewFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewFactory.cs" />

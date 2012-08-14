@@ -1,5 +1,6 @@
 ﻿
 using System;
+using DonPavlik.Desktop.Contacts.ViewModels;
 namespace DonPavlik.Desktop.Contacts.Interfaces
 {
 	/// <summary>
@@ -24,5 +25,17 @@ namespace DonPavlik.Desktop.Contacts.Interfaces
 		/// Gets the selected contact item
 		/// </summary>
 		object SelectedContactItem { get; }
+
+		/// <summary>
+		/// Removes an existing organization
+		/// </summary>
+		/// <param name="organization">Organization to be removed</param>
+		void RemoveExistingOrganization(OrganizationViewModel organization);
+
+		/// <summary>
+		/// Removes existing contact
+		/// </summary>
+		/// <param name="contact">Contact that is be destroyed</param>
+		void RemoveExistingContact(ContactViewModel contact);
 	}
 }
