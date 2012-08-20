@@ -99,7 +99,8 @@
 				VerticalContentAlignment="Center"
 				Margin="20,5,0,0"
 				Height="27"
-				Width="300" />
+				Width="300" 
+				MaxLength="85"/>
 			<!--EndRegion-->
 
 			<Button

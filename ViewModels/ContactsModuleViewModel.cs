@@ -21,9 +21,9 @@ namespace DonPavlik.Desktop.Contacts.ViewModels
 	{
 		#region Private Constants and Fields
 
-		private object _ActiveItem;
-
 		private readonly IViewFactory _ViewFactory;
+
+		private object _ActiveItem;
 
 		#endregion
 

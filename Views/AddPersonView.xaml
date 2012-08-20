@@ -98,7 +98,8 @@
 				VerticalContentAlignment="Center"
 				Margin="20,5,0,0"
 				Height="27"
-				Width="300" />
+				Width="300"
+				MaxLength="85" />
 			<!--EndRegion-->
 			
 			<!--Region Email Entry -->
@@ -117,7 +118,8 @@
 				VerticalContentAlignment="Center"
 				Margin="20,5,0,0"
 				Height="27"
-				Width="300" />
+				Width="300"
+				MaxLength="85" />
 			<!--EndRegion-->
 
 			<!--Region Gender Selection Row 1 -->
